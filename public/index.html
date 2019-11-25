@@ -1,0 +1,959 @@
+<!doctype html>
+<!--Copyright James Palmer 2019 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="James' attempt at bringing game nights to the 21st century">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bag Minge</title>
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Bag Minge">
+  <meta name="theme-color" content="#303F9F">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bag Minge">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+
+  <!-- Tile icon for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <meta name="msapplication-navbutton-color" content="#303F9F">
+
+<!-- Bootstrap-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script>
+
+  
+<!-- manifest and icons -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#009688">
+<link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
+<link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
+ 
+ <!-- register service worker -->
+ <!--  <script src="register-sw.js" defer></script>
+  -->
+
+<!--force HTTPS redirect -->
+<script> if (location.protocol != 'https:')
+{
+ location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+ console.log("redirected to HTTPS")
+}</script>
+  
+<link rel="stylesheet" href="main.css">
+  
+   <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+
+  <script>
+  // Web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBuXyvgX4mBbFB-NfLK3HYE88_6h_4-5Tg",
+    authDomain: "bagminge.firebaseapp.com",
+    databaseURL: "https://bagminge.firebaseio.com",
+    projectId: "bagminge",
+    storageBucket: "bagminge.appspot.com",
+    messagingSenderId: "492822420231",
+    appId: "1:492822420231:web:abb6b44b182e7c37"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);    
+</script>
+</head>
+<body>
+
+
+<main>
+
+  <!--preload sounds-->
+  <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
+  
+  <audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
+  
+  <audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
+  
+  <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio>
+  
+  
+  
+<!--*****************************    
+Welcome splash screen 
+**************************-->
+  <section id="wordCloud" style="display:block">
+ <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell</p>
+  </section>
+    
+  <section id="page-splash" style="display:block">
+    <div class="container">
+      <div class="row">
+        <h1>BAG GAME</h1>
+      </div>
+       
+    <div class="row">
+      <button id="join-button" class="splashButtons btn btn-primary"><i class="fa fa-users"></i><a>JOIN A GAME</a></button>
+      <button id="create-button" onclick="createScreen()" class="splashButtons btn btn-primary"><i class="fa fa-pencil"></i><a>SETUP NEW GAME</a></button>
+    </div>
+   </div>   
+   <img  id="splashLogo" alt="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fshopping-bag%20(1).png?v=1571619765796">
+  </section> 
+  
+  
+<!-- ******************
+    Bottom Nav menu items
+  ******************* -->
+<div id="header" style="display:block">
+  
+   <div class="navbarbottom" id="appNavBar" style="display:none" >
+      
+     <div class="more-ot-alert" id="turnAlert" style="display:none">
+          <span class="close-ot-alert">It's your turn!</span>   
+      </div>
+           
+        <a id="menu-goHome" style="display: block" class=""><i class="fa fa-home"></i></a>
+        <a id="menu-start"  style="display: block" class=""><i class="fa fa-play"></i></a>
+        <a id="menu-teams"  style="display: block" class=""><i class="fa fa-users"></i></a>
+        <a id="menu-scores" style="display: block" class=""><i class="fa fa-trophy"></i></a>
+        <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>
+        <a id="menu-refresh"  style="display: block" class=""><i id="refreshIcon" class="fa fa-refresh"></i></a>   
+   </div>
+  
+  <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-brand">
+         <h2>BAG APP
+         </h2>
+       </div>        
+      </div>
+    </nav>
+    
+  <img alt="logo" id="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
+     
+ </div>
+      
+  <div class="dropdown" style="position:fixed; top:0px;right:0px; color:white;">
+        <button type="button" id="loginName" class="btn dropdown-toggle" style="color:white;" data-toggle="dropdown">Options</button>
+    <div class="dropdown-menu">
+      <button class="dropdown-item" data-toggle="modal" data-target="#howTo">Rules</button>
+      <button class="dropdown-item" id="LogOut" onclick="bmLogOut();">Log Out</button>
+    </div>
+  </div>
+       
+  
+    <!-- GAME OVER SCREEN
+**************************-->
+<section id="gameOverScreen" style="display:none">
+  <div class="container" >  
+     <div class="row" >
+       <h3 type="text" id="gameOver" style="width:100%; text-align:center; font-weight: bold; padding-top: 20px;">GAME OVER!</h3>
+      </div>
+    </div> 
+</section>  
+  
+<!--*****************************  
+create new game screen 
+***********************************-->  
+<section id="createScreen" style="display:none">
+   
+  <div class="container" style="padding-top:40px">
+    <div class="row" >
+        <a onclick="createBack()" class="btn backButton"><i class="fa fa-arrow-left"></i> Back</a>
+    </div>
+    
+    <div class="input-group mb-3">
+      <input id="setupSessionName" type="text"  maxlength="100" placeholder="Give your session a recognizable name" class="form-control" aria-label="Session Name" aria-describedby="inputGroup-sizing-default">
+    </div>
+    
+    <div id="enterPlayerChips" class="chips chips-placeholder">
+      <div class="input-group mb-3">
+          <input type="text" class="form-control" id="addPlayerName" placeholder="Enter player names" aria-label="Player name" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="addPlayer"><i class="fa fa-plus"></i> Add player</button>
+            <button class="btn btn-outline-secondary" type="button" id="clearPlayersEntered">&#10060;</button></div>  
+        </div> 
+      <a id="playersEntered"></a>
+
+    </div>
+      
+    <div class="input-group mb-3" id="numberOfNames">
+       <select class="custom-select" id="createNameCount">
+         <option value="" selected disabled>How many names per person?</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+      <option>9</option>
+      <option>10</option>
+       </select>
+    </div>
+    
+    <div class="input-group mb-3" id="numberOfTeams">
+       <select class="custom-select" id="createSelectTeamNumber">
+          <option value="" selected disabled>How many teams?</option>
+          <option>2 teams</option>
+          <option>3 teams</option>
+          <option>4 teams</option>
+       </select>
+    </div>
+    
+          <div class="input-group mb-1">
+            <input id="setupTeamOne" type="text" maxlength="20" class="form-control" placeholder="Team 1 name">
+          </div>
+          <div  class="input-group mb-1">
+            <input id="setupTeamTwo" type="text" maxlength="20" class="form-control"  placeholder="Team 2 name">
+          </div>
+          <div  class="input-group mb-1">
+            <input id="setupTeamThree" type="text" style="display:none" class="form-control"   maxlength="20" placeholder="Team 3 name">
+          </div>
+          <div  class="input-group mb-1">
+            <input id="setupTeamFour" type="text" style="display:none" class="form-control" maxlength="20" placeholder="Team 4 name">
+          </div>
+
+    
+    <div style="padding:30px 0px">
+     <form>
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="createJoker" >
+        <label class="custom-control-label" for="createJoker">Enable Joker Turn (x2 points):</label>
+      </div>
+    </form>
+    
+    </div>
+
+    <form>
+      <label for="timePicked">Select turn time:</label>  <a id="timeRound">45</a> seconds per turn
+      <input type="range" class="custom-range" id="timePicked" min="20" max="100" value="45" step="5" name="points1">
+     
+    </form>
+  
+    <button id="setupCreateGameSessionButton" onclick="createGameSession()" class="btn btn-primary submit">Create game session</button>  
+  
+  </div>
+      
+</section>
+ 
+<!--********************************
+Game create successfully screen
+*********************************-->
+<section id="createSuccess" style="display:none">
+<div class="container" style="padding:80px 5px">
+  <br>
+  <h5>Game successfully created!</h5>
+  <br><hr>
+  
+
+    <div class="input-group mb-3" id="createPlayer">
+      <select class="custom-select" id="createSelectPlayer" onchange="showCreateJoinButton()">
+        <option value="" selected disabled>Please select a player</option>
+      </select>
+    </div>
+  
+  
+     <div>
+   <button id="createJoinButton" onclick="createJoinGame()" style="display:block; " class="btn btn-primary submit">Join Game</button>
+    </div>
+</div>
+  
+</section> 
+
+  
+<!--*****************************  
+Join game screen 
+**************************-->
+  <section id="joinScreen" style="display:none">
+   <br>
+    <div class="container" style="padding: 60px;">
+     <a onclick="createBack()" class="btn backButton"><i class="fa fa-arrow-left"></i> Back</a>
+     <h4>
+       Welcome to Bag Minge!</h4>
+      <p>
+        If you have an active game setup, select your session name (ask your bag master if you're not sure) and pick your player.
+     </p>
+   <hr>
+      
+ <div class="input-group mb-3" id="session">
+  <select class="custom-select" id="selectSession" onchange="sessionPick()">
+    <option value="" selected disabled>Please select a session</option>
+  </select>
+</div>
+      
+  <div class="input-group mb-3" id="player">
+  <select class="custom-select" id="selectPlayer" style="display:none" onchange="playerPick()">
+    <option value="" selected disabled>Please select a player</option>
+  </select>
+</div>
+    
+   
+      <div>
+   <button id="joinGame" onclick="joinGame()" style="display:none" class="btn btn-primary submit">Join Game</button>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+<!--*****************************    
+Waiting Screen - while players enter names
+**************************-->  
+  <section id="waitScreen" style="display:none">
+    <div align="center" class="container" style="align:center; padding-top:50px">
+      <div class="row" style="align:center; padding-bottom:50px">
+        <h5>Waiting for remaining players to enter names into the bag</h5>  
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+            <div class="loader">
+                <div class="loader-inner">
+                    <div class="loading one"></div>
+                </div>
+                <div class="loader-inner">
+                    <div class="loading two"></div>
+                </div>
+                <div class="loader-inner">
+                    <div class="loading three"></div>
+                </div>
+                <div class="loader-inner">
+                    <div class="loading four"></div>
+                </div>
+            </div>
+        </div>
+    </div>   
+  
+  <div class="row" text-align="center">
+      <div class="col-md-12">
+   <br><br><hr>Waiting for: <p id="playersYetToEnter">James, Alice</p>
+  </div>      
+      </div>
+  </div>   
+
+</section>
+  
+  
+<!--*****************************    
+Welcome Screen - basic info at the start
+**************************-->  
+<section id="welcomeScreen" style="display: none">
+  <div class="container">
+    
+    <div class="row">
+       <h4>
+         Welcome to your <span id="welcomeSession"></span> game of Bag Minge, <span id="welcomePlayer"></span>!
+      </h4>
+      <h5>
+        You're on the <span id="welcomeTeam" style="font-weight: bold; color:teal"></span> team, join up with your teammates now!
+      </h5>
+      <hr>
+      <h5>
+       <span id="upNextPlayer" style="font-weight: bold; color:teal"></span> from the  <span id="upNextTeam" style="font-weight: bold; color:teal"></span> team is up next!
+      </h5>
+ 
+  
+    </div>
+    <div class="row">
+      <button id="welcomeTeamsButton" onclick="showTeamScreen();enableNavBarButtons();"  class="homeButtons btn btn-primary"><i class="fa fa-users"></i>See all teams</button>
+      <button id="welcomeHomeButton"  onclick="showSection(homeScreen, menuHome);showHomeScreenDetails();enableNavBarButtons();" class="homeButtons btn btn-primary"><i class="fa fa-home"></i>Go to Home Screen</button>
+    </div>
+   
+  </div>
+</section>
+  
+  
+<!--*****************************    
+Game home Screen
+**************************-->
+     
+ <section  id="homeScreen" style="display:none">
+  <div class="container">
+      <div class="row" style="padding:80px 10px 10px 20px;">
+         <h5><b>Next player up:</b></h5>
+      </div>
+      
+      <div class="row" style="padding:10px">
+          <div class="col s4"><h7 id="showNextPlayer" >Player</h7></div>
+          <div class="col s5"><h7 id="showNextTeam" >Team</h7></div>
+          <div  class="col s3"><h7 id="showRound">Round</h7></div>
+      </div>  
+    
+      <hr>
+
+    <div id="homeMiddle">
+      
+      <div id="homeWait" style="display:none">
+        <div class="row" style="padding-top:5vh">
+          <div class="col-md-12">
+              <div class="loader">
+                  <div class="loader-inner">
+                      <div class="loading one"></div>
+                  </div>
+                  <div class="loader-inner">
+                      <div class="loading two"></div>
+                  </div>
+                  <div class="loader-inner">
+                      <div class="loading three"></div>
+                  </div>
+                  <div class="loader-inner">
+                      <div class="loading four"></div>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>   
+    
+    <div id="homeStart" style="display:none"> 
+      <a id="homeStartButton" class="video-play-button" href="#">
+        <span></span>
+      </a>
+    </div>
+      
+    <div id="homeMyTeam" style="display:none"> 
+      <a id="homeMyTeamIcon" class="homeButton" href="#">
+               <i class="fa fa-users"></i>
+      </a>
+      <h4 id="homeMyTeamText">
+        <span id="myTeamPlayer" style="color:teal; font-weight: bold">James</span>  is up: guess the name they are <span id="myTeamRound">describing</span>!
+      </h4>
+    </div>
+      
+          
+    <div id="homeGoInProgress" style="display:none"> 
+      <a id="homeGoInProgressIcon" class="video-play-button homeIcon" href="#">
+            <i class="fas fa-tv"></i>
+      </a>
+    </div>
+
+    </div>
+      
+  </div>
+</section>
+  
+  
+<!--*****************************  
+start screen 
+**************************-->
+  
+ <!-- pre-game start splash-->
+<section id="startScreen" style="display: none">
+  <section id="start-splash"> 
+    <div class="container">
+      
+       <div id="startShowCurrentRound"></div>
+      
+        <p id="startTimeLeft"></p>
+     
+        <form>
+          <div class="custom-control custom-switch" id="startJoker" style="display:none">
+            <input type="checkbox" class="custom-control-input" id="activeJoker" >
+            <label class="custom-control-label" for="activeJoker">Use Joker this turn (x2 points):</label>
+          </div>
+        </form>
+      
+    <hr>
+   <h5>Are you ready <span id="startShowPlayer"></span>?</h5>
+    <hr>
+      
+    <button id="gameStartButton" onclick="startRound()" class="btn btn-primary aboveNavButton" style="background-color:#e57373" >Start your turn!</button>
+  </div>
+  </section>
+</section>
+    
+  
+<!--****************
+ game page 
+********************-->
+<section id="gameStart" style="display: none">
+  
+   <div class="container">
+    <div class="row" >
+      <a type="text" id="gameShowName" style="text-align:center;width:100%; padding:50px 0px 0px 0px; font-size: 6vh; ">bag name</a>
+      <a id="gameGotPassButton"  onclick="gameGotPassButton()" style="text-align: center; width:100%; display:block"><i id="gameShowNamePassed" style="font-size: 1.2em; width:100%; text-align:center; color: red">passed bag name </i><i class="fas fa-thumbs-up" style="font-size:15pt; color:red"></i></a>
+    </div>
+          
+    <div class="row">
+      <a class="timee" style="text-align:center;width:100%; padding:10px 0px; font-size: 15vh" id="gameShowTime">18</a>
+    </div>
+      
+     <div class="progress" >
+      <div class="progress-bar progress-bar-striped bg-info" role="progressbar" id="roundProgressBar" style="width: 15%" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+     
+     <div class="row" style="padding: 10px 0px">
+       <h5 id="gameShowNumberLeft" style="text-align:center;width:100%;">Just the passed name left!</h5>
+     </div>
+     
+
+    
+       <div class="row" style="height:25vh; width: 100%; position:fixed; bottom:0px; padding:0px;">
+         <div class="col-8" style="padding:0px;">
+           <button id="gameGotItButton" onclick="gameGotItButton()" type="button" class="btn btn-info" style="width:100%; height:100%; padding:0px;"><i class="far fa-thumbs-up" style="font-size:4em; padding: 10px;"></i><br>Got it!</button>
+         </div>
+         <div class="col-4" style="padding:0px;"><button id="gamePassButton" onclick="gamePassButton()"  type="button" class="btn btn-danger" style="width:100%; height:100%;"><i class="fas fa-reply"></i><br>Pass</button></div>        
+    
+
+      </div>
+          
+
+    </div>
+  </section>
+         
+<!-- End round splash page -->  
+<section id="roundEnd-splash" style="display:none">
+  <div class="container">
+  <div id="roundEndScore" style="padding: 50px 10px 20px 10px">
+    <div class="row" style="width:100%">
+       <h7 id="endRoundMessage" style="width:100%">-</h7>  
+    </div>
+    <div class="row">
+       <h7 id="endRoundScore" style="width:100%; padding-bottom: 10px;">-</h7>
+    </div> 
+
+    <div class="row">
+     <div class="col-6" id="namesGuessed1" style="border:0px">
+        <li id="nameGuessed1"></li>
+        <li id="nameGuessed3"></li>
+        <li id="nameGuessed5"></li>
+        <li id="nameGuessed7"></li>
+        <li id="nameGuessed9"></li>
+        <li id="nameGuessed11"></li>
+        <li id="nameGuessed13"></li>
+     </div>    
+      <div class="col-6 collection" id="namesGuessed2" style="border:0px">
+        <li id="nameGuessed2"></li>
+        <li id="nameGuessed4"></li>
+        <li id="nameGuessed6"></li>
+        <li id="nameGuessed8"></li>
+        <li id="nameGuessed10"></li>
+        <li id="nameGuessed12"></li>
+        <li id="nameGuessed14"></li>
+     </div>    
+      </div>   
+     <hr>
+    </div>
+  </div>  
+  
+<button id="roundEndHomeButton"  onclick="showSection(homeScreen, menuHome);showHomeScreenDetails();enableNavBarButtons();" class="submit btn btn-primary"><i class="fa fa-home" style="font-size: 4em"></i></button>
+</section>
+     
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+  <!-- Show teams screen 
+*****************************-->
+  
+<section id="teamsScreen" style="display:none">  
+  
+  
+<ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link active">Team 1</a>
+  </li>
+  <li class="nav-item">
+    <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link">Team 2</a>
+  </li>
+  <li class="nav-item">
+     <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link">Team 3</a>
+  </li>
+  <li class="nav-item">
+    <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link">Team 4</a>
+  </li>
+</ul>
+  
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="teamShowTeamOne" role="tabpanel" aria-labelledby="teamOne">
+      <div class="teams">
+        <h2 id="showTeamOneName">TEAM ONE</h2>
+        <ul>
+          <li id="t1p1">1</li>
+          <li id="t1p2">2</li>
+          <li id="t1p3">3</li>
+          <li id="t1p4">4</li>
+          <li id="t1p5"></li>
+          <li id="t1p6"></li>
+          <li id="t1p7"></li>
+          <li id="t1p8"></li>
+          <li id="t1p9"></li>
+        </ul>
+     </div> 
+  </div>
+  <div class="tab-pane fade" id="teamShowTeamTwo" role="tabpanel" aria-labelledby="teamTwo">
+      <div class="teams">
+      <h2 id="showTeamTwoName">TEAM TWO</h2>
+        <ul>
+        <li id="t2p1">asd</li>
+        <li id="t2p2">asdasdasd</li>
+        <li id="t2p3">sfdad</li>
+        <li id="t2p4"></li>
+        <li id="t2p5"></li>
+        <li id="t2p6"></li>
+        <li id="t2p7"></li>
+        <li id="t2p8" ></li>
+        <li id="t2p9"></li>
+        </ul>  
+     </div>    
+  </div>
+  <div class="tab-pane fade" id="teamShowTeamThree" role="tabpanel" aria-labelledby="teamThree" >
+      <div class="teams">
+        <h2 id="showTeamThreeName">TEAM THREE</h2>
+        <ul>
+        <li id="t3p1"></li>
+        <li id="t3p2"></li>
+        <li id="t3p3"></li>
+        <li id="t3p4"></li>
+        <li id="t3p5"></li>
+        <li id="t3p6"></li>
+        <li id="t3p7"></li>
+        <li id="t3p8"></li>
+        <li id="t3p9"></li>
+        </ul>
+      </div>    
+  </div>
+  <div class="tab-pane fade" id="teamShowTeamFour" role="tabpanel" aria-labelledby="teamFour">
+      <div class="teams">
+       <h2 id="showTeamFourName">TEAM FOUR</h2>
+        <ul>
+        <li id="t4p1"></li>
+        <li id="t4p2"></li>
+        <li id="t4p3"></li>
+        <li id="t4p4"></li>
+        <li id="t4p5"></li>
+        <li id="t4p6"></li>
+        <li id="t4p7"></li>
+        <li id="t4p8"></li>
+        <li id="t4p9"></li>
+        </ul>
+      </div> 
+  </div>
+</div>
+  
+  
+</section>  
+  
+  
+  <!-- show scores screen 
+**************************-->
+  <div class="container">  
+      <div id="scoreboard" style="display:none">
+        <h2 style="text-align:center">
+          Scoreboard
+        </h2>
+          <div class="row scoreboard scores1" id="gridOne">
+            <div class="col-10" id="scoreGridTeamOne">TEAM A</div>
+            <div class="col-2" id="scoreGridTeamOneScore">-</div>
+          </div>
+          <div class="row scoreboard scores2" id="gridTwo">
+            <div class="col-10" id="scoreGridTeamTwo">TEAM B</div>
+            <div class="col-2" id="scoreGridTeamTwoScore">-</div>
+          </div>
+          <div id="gridThree" style="display:none">
+            <div class="row scoreboard scores1"> 
+              <div class="col-10" id="scoreGridTeamThree">TEAM C</div>
+              <div class="col-2" id="scoreGridTeamThreeScore">25</div>
+            </div>
+          </div>
+          <div  id="gridFour" style="display:none">
+            <div class="row scoreboard scores2"> 
+              <div class="col-10" id="scoreGridTeamFour">TEAM D</div>
+              <div class="col-2" id="scoreGridTeamFourScore">-</div>
+            </div>
+          </div>
+     </div>
+  </div>
+  
+  
+<section id="scoresScreen" style="display:none">
+     <div class="container">      
+      <div id="chartContainer" style="height: 35vh; width: 100%; align:center"></div>
+      <br>
+      <div id="mVPTag" style="display:none">
+        <div class="row scores1 scoreboard">
+          <div class="col-2">MVP: </div> 
+          <div class="col-7" id="mVP"></div>
+          <div class="col-3" id="mVPScore"></div> 
+        </div>
+       </div>
+     </div>
+</section>
+  
+  <!-- show live round screen 
+**************************-->
+<section id="roundScreen" style="display:none">
+  <div class="container" >  
+     <div class="row">
+       <br>
+       <div id="turnStatus" class="turnStatus">
+         <h5>No turn in progress</h5>
+       </div>
+    </div>
+    <div class="row">
+       <div id="turnInProgress" class="turnInProgress" style="display:none">
+           <h5 type="text" id="roundTeam" style="width:100%"></h5>
+      </div>
+      <div class="row">
+           <h5 type="text" id="roundPlayer" style="width:100%"></h5>
+       </div>
+    </div>
+    <div class="row">
+       <div id="turnInProgressNameScore" class="turnInProgressNameScore" style="display:none">
+        <div class="row">   
+         <h5 type="text" id="roundScoreNow"  style="width:100%"></h5>
+        </div>
+         <div class="row">
+           <h5 type="text" id="lastNameGuessed"  style="width:100%"></h5>
+       </div>
+      </div>
+    </div>
+    <div class="row">
+        <h5 type="text" id="roundNextTeam"></h5>
+    </div>
+    <div class="row">
+        <h5 type="text" id="roundNextPlayer"></h5>
+     </div> 
+  </div>
+</section>  
+
+  
+  
+  <!-- show information screen screen 
+**************************-->
+ <div class="modal fade" id="howTo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="howToTitle">Rules</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <p>"Bag Minge" is the perfect blend of party game classics; combining articulate with charades where a good memory for names gets you ahead</p>
+      <p>Played across 3 rounds, teams of players take it in turns to draw names at random from the bag and either describe, give a clue or act it out for the rest of their team to guess</p>
+      <p>
+        <b>Starting the game</b>
+      </p>
+      <p>
+        One player (or "Bagmaster") creates a new game and sets up the parameters of the game (things like how many teams, how many names people enter, how long each turn goes on for). Once this is created, other players will be able to join the game and get going.
+      </p>
+      <p>
+        First off, each player in the game enters names (number to be decided by the Bagmaster in the setup) into the bag. These names can be celebrities, athletes, historical figures or even just your mates Mum. The only criteria is that the name has to be broadly recognisable to the other players
+      </p>
+      <p>
+        Once every player in the session has entered their names, the game begins and each player is randomly allocated to even teams
+      </p>
+      <p>
+        Each team will take it in turns to have one player draw names from the bag while the others try to guess it. Once a name is guessed, it is removed from the bag for that round and the players pulls the next name. The player can pass on a name ONCE per turn, though they can always come back to it later.
+      </p> 
+      <p>
+        When the timer runs out, it's on to the next team to guess. The next player to draw from the bag will be shown at the top of the home screen and the start turn button will be available for them to start their turn
+      </p>
+      <p>
+        If there are no names left in the bag, the round ends but your time gets carried over to the next round
+      </p>
+      <p>
+        At the end of the 3rd round, the team with the most names guessed wins! 
+      </p>
+      <p>
+        Optional: During the game setup, the bagmaster can enable a "Joker" round that each team can play once during the game before their turn starts. During this round, every name guessed counts for 2 points. If you run out of names during the round, your joker carries on for the remainder of your turn. Use it wisely!
+      </p>
+
+      
+      <hr>
+      
+      <p><b>Round 1</b>
+      <p>Articulate the name in as many words as you like without mentioning the name itself, "sounds like" or "rhymes with"</p>
+      </p>
+    
+      <hr>
+    
+    <p><b>Round 2</b>
+    
+    <p>Give a 1 word clue for the name; hint - the names are the same as in round 1 so use that for some inspiration. Once you've said your word, you're committed, no going back!</p>
+     </p>
+  
+    <hr>
+  
+    <p><b>Round 3</b>
+      <p>Act out the name; good old fashioned charades. Remember, the names are still the same!</p>
+      </p>
+  
+    <hr>
+  
+    <p>Once all of the names are guessed at the end of round 3, the scores are tallied and the winner announced!</p>    
+    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  
+        
+  
+<!-- Enter names screen 
+**************************-->
+  <section  id="enterScreen" style="display: none">
+    <div class="container" >   
+      <div style="padding: 10px 10px 0px 50px">
+        <h5>Player: <span id="enterPlayerPicked"></span></h5>
+        <h5>Session: <span id="enterSessionPicked"></span></h5>
+       </div>
+      <hr>
+       Enter <span id="enterNameCount"></span> names into the minge bag:<br>
+      
+      <div class="row" style="padding-top: 20px">
+        <div class="col">
+               
+         <div class="input-group mb-3">
+            <input id="enterNameOne" onclick="oneSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a style="display:none" id="randomWikiNameButton1" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+         
+          <div class="input-group mb-3">
+            <input id="enterNameTwo" onclick="twoSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton2" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      
+         <div class="input-group mb-3">
+            <input id="enterNameThree" onclick="threeSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton3" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      
+         <div class="input-group mb-3">
+            <input id="enterNameFour" onclick="fourSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton4" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+        
+         <div class="input-group mb-3">
+            <input id="enterNameFive" onclick="fiveSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a style="display:none" id="randomWikiNameButton5" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+           
+      </div>
+           
+      <div class="col">
+        
+          <div class="input-group mb-3">
+            <input id="enterNameSix" onclick="sixSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton6" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      
+         <div class="input-group mb-3">
+            <input id="enterNameSeven" onclick="sevenSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton7" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      
+         <div class="input-group mb-3">
+            <input id="enterNameEight" onclick="eightSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton8" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      
+         <div class="input-group mb-3">
+            <input id="enterNameNine" onclick="nineSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton9" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      
+         <div class="input-group mb-3">
+            <input id="enterNameTen" onclick="tenSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <a  style="display:none" id="randomWikiNameButton10" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
+          </div>
+      </div>
+        
+      </div> 
+
+      <button type="button" disabled id="submitNamesButton" onclick="enterSubmitNames()" class="btn btn-primary submit">Submit Names</button>
+    </div>  
+
+  </section>
+
+
+ <div class="modal fade" id="wikiNameModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="height:80vh; align:center;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="wikiModalTitle">Wikipedia Celebrity Suggestion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+           <iframe id="wiki" style="border:none" height="100%" width="auto"></iframe>
+             <div id="wikiWait">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="loader">
+                            <div class="loader-inner">
+                                <div class="loading one"></div>
+                            </div>
+                            <div class="loader-inner">
+                                <div class="loading two"></div>
+                            </div>
+                            <div class="loader-inner">
+                                <div class="loading three"></div>
+                            </div>
+                            <div class="loader-inner">
+                                <div class="loading four"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+              </div> 
+        <div class="modal-footer">
+            <button type="button" class="btn btn-dark" onclick="getRandomWikiName()">Pick another</button>
+            <button type="button" class="btn btn-success" onclick="addRandomWikiName()" data-dismiss="modal">Add name</button>
+        </div>
+      </div>
+    </div>
+   </div>
+</div>
+
+  
+  <!--*******************
+END GAME BUTTONS AND CONFIRMS
+**********************-->
+  <!-- Modal Trigger -->
+  <button id="endGameTrigger" style="display:none" class="btn btn-danger btn-circle endGameTrigger modal-trigger" data-target="endGame">
+    <span aria-hidden="true">&times;</span>
+  </button>
+        
+  <!-- Modal Structure -->
+  <div id="endGame" class="modal fade">
+    <div class="modal-content">
+      <h4>End Game</h4>
+      <p>You are about to deactivate the <span id="endGameSession"></span> session.</p>
+      <p>This will remove access to the session, and all information, for you and all players.</p>
+      <p>Are you sure you want to deactivate the session?</p>
+    </div>
+    <div class="modal-footer">
+      <button href="#!" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      <button href="#!" onclick="endGame()" class="btn btn-danger" data-dismiss="modal">Deactivate</button>
+    </div>
+  </div>     
+
+<!--**********************************-->
+ 
+</main>
+
+
+<script src="scripts/main.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>             
+
+</body>
+
+</html>
