@@ -1,0 +1,20 @@
+{
+  "short_name": "Bagminge",
+  "name": "Bagminge",
+  "theme_color": "#fff",
+  "background_color": "#009688",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FJP%20Icon.png?v=1562202118739",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "start_url": "/"
+}

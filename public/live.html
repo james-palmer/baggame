@@ -1,0 +1,268 @@
+<!doctype html>
+<!--Copyright James Palmer 2019
+-->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="James' attempt at bringing game nights to the 21st century">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bag Minge App</title>
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Bag Minge">
+  <meta name="theme-color" content="#303F9F">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bag Minge">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+
+  <!-- Tile icon for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <meta name="msapplication-navbutton-color" content="#303F9F">
+
+  <!-- Material Design Lite -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.blue_grey-orange.min.css">
+  <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+  <link rel="stylesheet" href="main.css">
+
+  <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+<!-- ☝️ import firebase-database -->
+
+  <script>
+  // Web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBuXyvgX4mBbFB-NfLK3HYE88_6h_4-5Tg",
+    authDomain: "bagminge.firebaseapp.com",
+    databaseURL: "https://bagminge.firebaseio.com",
+    projectId: "bagminge",
+    storageBucket: "bagminge.appspot.com",
+    messagingSenderId: "492822420231",
+    appId: "1:492822420231:web:abb6b44b182e7c37"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  var db = firebase.firestore();  
+  var sessionPicked
+  var activeTeams
+    
+  getLiveActiveSessions();
+    
+ function getLiveActiveSessions() {
+  var activeSessions = [];
+  db.collection("sessions").where("active","==",true).get().then(function(querySnapshot) {
+     querySnapshot.forEach(function(doc) {
+    activeSessions.push(doc.id); 
+     });
+      return activeSessions;
+  }).then(function (activeSessions) {
+      liveSessionOptions(activeSessions);
+      $('#selectLiveSession').not('.disabled').formSelect();    
+    });
+};
+
+function liveSessionOptions (activeSessions){
+    console.log("Active sessions: "+ activeSessions);
+      //Start Session options set  
+     var selectStartSession = document.getElementById("selectLiveSession");
+      for(var i = 0; i < activeSessions.length; i++) {
+          var opt = activeSessions[i];
+          var el = document.createElement("option");
+          el.textContent = opt;
+          el.value = opt;
+          selectStartSession.appendChild(el);
+        } 
+}; 
+
+function liveSessionPick() {
+sessionPicked = document.getElementById('selectLiveSession').value;
+var unsubscribe =  db.collection("sessions").doc(sessionPicked)
+    .onSnapshot(function(doc) {
+     if (doc.data().turnActive == true){
+        if (doc.data().currentScore == 0) {
+          document.getElementById('liveRoundScore').innerHTML =  doc.data().currentScore;     
+        } else if (doc.data().currentScore == 1) {
+          document.getElementById('liveRoundScore').innerHTML =  doc.data().currentScore+" point";     
+        } else {
+          document.getElementById('liveRoundScore').innerHTML =  doc.data().currentScore+" points";     
+        }
+          document.getElementById('liveRoundPlayer').innerHTML =  doc.data().currentPlayer;     
+          document.getElementById('liveRoundTeam').innerHTML =  doc.data().currentTeam;
+          document.getElementById('liveNameGuessed').innerHTML = "Name guessed: "+doc.data().lastNameGuessed;           
+     } else {
+          document.getElementById('liveRoundPlayer').innerHTML =  "Next player: "+doc.data().currentPlayer;     
+          document.getElementById('liveRoundTeam').innerHTML =  "Turn over<br><br>Next team: "+doc.data().currentTeam;
+         document.getElementById('liveRoundScore').innerHTML =  "Last turn score: "+doc.data().currentScore+" points";   
+         document.getElementById('liveNameGuessed').innerHTML = ""           
+     }
+    });
+
+    activeTeams = [];
+    db.collection("teams").where("sessionName","==",sessionPicked).get().then(function(querySnapshot) {
+     querySnapshot.forEach(function(doc) {
+      activeTeams.push(doc.id); 
+     });
+      return activeTeams;
+    }).then(function (activeTeams){
+     activeTeamOne = activeTeams[0];
+      activeTeamTwo = activeTeams[1];
+      activeTeamThree = activeTeams[2];
+      activeTeamFour = activeTeams[3];  
+      
+      if(typeof activeTeamOne !== "undefined"){
+        db.collection("teams").doc(activeTeamOne).onSnapshot(function(doc) {       
+          var t1score = doc.data().totalScore 
+        if (t1score !== "undefined"){
+      document.getElementById('liveGridTeamOneScore').innerHTML = t1score   
+          console.log(t1score)
+        } else {
+             document.getElementById('liveGridTeamOneScore').innerHTML = 0
+           }
+      document.getElementById("gridOne" ).style.display = "block";
+      document.getElementById('liveGridTeamOne').innerHTML = activeTeamOne
+      })
+      }
+      
+      if(typeof activeTeamTwo !== "undefined"){
+      db.collection("teams").doc(activeTeamTwo).onSnapshot(function(doc) {       
+          var t2score = doc.data().totalScore 
+        if (t2score !== "undefined"){
+      document.getElementById('liveGridTeamTwoScore').innerHTML = t2score   
+          } else {
+             document.getElementById('liveGridTeamTwoScore').innerHTML = 0
+           }
+      document.getElementById("gridTwo" ).style.display = "block";
+      document.getElementById('liveGridTeamTwo').innerHTML = activeTeamTwo
+      })
+      }
+      
+      if(typeof activeTeamThree !== "undefined"){
+      db.collection("teams").doc(activeTeamThree)
+    .onSnapshot(function(doc) {       
+       var t3score = doc.data().totalScore 
+        if (t3score !== "undefined"){
+                document.getElementById('liveGridTeamThreeScore').innerHTML = t3score   
+           } else {
+             document.getElementById('liveGridTeamThreeScore').innerHTML = 0
+           }
+      document.getElementById("gridThree" ).style.display = "block";
+      document.getElementById('liveGridTeamThree').innerHTML = activeTeamThree
+      })
+      }
+      
+      if(typeof activeTeamFour !== "undefined"){
+      db.collection("teams").doc(activeTeamFour)
+    .onSnapshot(function(doc) {       
+        var t4score = doc.data().totalScore 
+        if (t4score !== "undefined"){
+            document.getElementById('liveGridTeamFourScore').innerHTML = t4score  
+          } else { document.getElementById('liveGridTeamFourScore').innerHTML = 0}
+      document.getElementById("gridFour" ).style.display = "block"; 
+      document.getElementById('liveGridTeamFour').innerHTML = activeTeamFour
+      })
+      }
+
+      
+    });
+  
+}   
+    
+    
+    
+    
+</script>
+</head>
+<body>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+<!-- Header section containing logo and menu
+****************************-->
+<div id="header">
+  <header> 
+  <div class="mdl-layout__header-row titlebar teal">
+       <h3>BAG M</h3>
+  </div>
+  </header>
+  </div>
+  
+  
+<main class="mdl-layout__content mdl-color--grey-100">
+ <br>
+  <div class="container">
+   <div class="input-field" id="liveSession">
+    <select id="selectLiveSession" onchange="liveSessionPick();">
+      <option disabled></option>
+      <option></option>
+      </select>
+      <label>Select a session:</label>
+    </div>
+
+    
+  <!-- show live round screen 
+**************************-->
+    <div class="row">
+      <div class = "col s6">
+        <div class="row" id="liveRoundTeam">-</div>
+        <div class="row" id="liveRoundPlayer">-</div>
+        <div class="row" id="liveRoundScore" >-</div>
+        <div class="row" id="liveNameGuessed" >-</div>
+      </div> 
+      <div class="col s6">
+        <div class="row scores10" id="gridOne" style="display:none">
+            <div class="col s10" id="liveGridTeamOne">
+             </div>
+            <div class="col s2" id="liveGridTeamOneScore"></div>
+          </div>
+          <div class="row scores20" id="gridTwo" style="display:none">
+            <div class="col s10" id="liveGridTeamTwo">
+             </div>
+            <div class="col s2" id="liveGridTeamTwoScore"></div>
+          </div>
+          <div class="row scores30" id="gridThree" style="display:none">
+              <div class="col s10" id="liveGridTeamThree">
+             </div>
+            <div class="col s2" id="liveGridTeamThreeScore"></div>
+          </div>
+          <div class="row scores20" id="gridFour"  style="display:none">
+            <div class="col s10" id="liveGridTeamFour">
+             </div>
+            <div class="col s2" id="liveGridTeamFourScore"></div>
+          </div>
+        </div>
+      <div id="chartContainer" style="height: 280px; width: 100%; center-align"></div>
+  </div>   
+
+    
+  </div> 
+ 
+    
+
+
+<script src="scripts/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>   
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>    
+<script src="scripts/main.js"></script>
+    </main>
+  </div>
+  </body>
+<footer>
+James Palmer
+</footer>
+</html>
