@@ -2579,7 +2579,6 @@ function mVP(){
         });
 
     document.getElementById('myScores').style.display = "none" 
-    document.getElementById('mVPTag').style.display = "none" 
     document.getElementById('myScore').innerHTML = ""
     document.getElementById('myRank').innerHTML = ""
     
