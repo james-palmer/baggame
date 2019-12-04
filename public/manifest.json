@@ -3,18 +3,29 @@
   "name": "Bagminge",
   "theme_color": "#fff",
   "background_color": "#009688",
+  "description": "A digitized bag minge game",
+  "orientation": "any",
   "icons": [
     {
-      "src": "https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785",
-      "type": "image/png",
-      "sizes": "192x192"
+    "src": "https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FIcon-128.png?v=1575429198590",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FIcon-152.png?v=1575429198571",
+      "sizes": "152x152",
+      "type": "image/png"
+    }, {
+      "src": "https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FIcon-192.png?v=1575429198507",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FJP%20Icon.png?v=1562202118739",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FIcon-512.png?v=1575429199408",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "display": "standalone",
-  "start_url": "/"
+  "start_url": "/",
+  "gcm_sender_id": "103953800507"
 }
