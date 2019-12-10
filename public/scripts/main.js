@@ -7,6 +7,7 @@ var menuTeams = document.getElementById('menu-teams');
 var menuScores = document.getElementById('menu-scores');
 var menuRound = document.getElementById('menu-round');
 var menuRefresh = document.getElementById('menu-refresh');
+var menuExit = document.getElementById('menu-exit');
 
 //screens
 var homeScreen = document.getElementById('homeScreen');
@@ -30,6 +31,10 @@ var playerNames =[]
 //Elements
 var selectSession = document.getElementById("selectSession");
 
+// Lottie Animations
+const fireworks = document.getElementById("fireworks")
+const confetti = document.getElementById("confetti")
+
 // Firestore
 var db = firebase.firestore();  
 var sessions = db.collection('sessions');
@@ -38,7 +43,13 @@ var teams = db.collection('teams');
 var increaseBy = firebase.firestore.FieldValue.increment(1);
 var increaseBy2 = firebase.firestore.FieldValue.increment(2);
 
-var wordCloudNames = []
+//Track firestore listeners
+var listenMVP = false
+var listenShowHome = false
+var listenCheckEntered = false
+var listenLiveRound = false
+
+var wordCloudNames = [];
 
 // Selected variables
 var activeSessions = [];
@@ -121,6 +132,7 @@ var countPlayersLeftToEnter
 var teamCount;
  var hasEnteredNames;
  var turnActive
+ var timeRoundEnd
 
 var roundProgress
 
@@ -132,11 +144,11 @@ var t3p1;var t3p2;var t3p3;var t3p4;var t3p5;var t3p6;var t3p7;var t3p8;var t3p9
 
 var t4p1;var t4p2;var t4p3;var t4p4;var t4p5;var t4p6;var t4p7;var t4p8;var t4p9;
   
- /* Cleanups the UI and removes all Firebase listeners.
- */
+
+////////////////////////////////////////////////////////////////////
+/* Cleanups the UI and removes all Firebase listeners.*/
+
 function cleanupUi() {
-  // Remove all previously displayed posts.
- 
   // Stop all currently listening Firebase listeners.
   listeningFirebaseRefs.forEach(function(ref) {
     ref.off();
@@ -200,12 +212,13 @@ window.addEventListener('load', function() {
 });
 
 // Bind menu buttons.
-  menuHome.onclick = function() {showSection(homeScreen, menuHome);showHomeScreenDetails();};
+  menuHome.onclick = function() {showSection(homeScreen, menuHome); updateHomeScreenDetails();};
   menuStart.onclick = function() {getStartInfo(); hideAlert();};
   menuTeams.onclick = function() {showTeamScreen();};
   menuScores.onclick = function() {showScoresScreen();};
   menuRound.onclick = function() {showRoundScreen();};
-  menuRefresh.onclick = function() {showHomeScreenDetails();};
+  menuRefresh.onclick = function() {updateHomeScreenDetails();};
+  menuExit.onclick = function() {bmLogOut()};
   
 // Bind home screen buttons.
   $('#homeStartButton').on('click', function(e){
@@ -221,12 +234,9 @@ window.addEventListener('load', function() {
 
 document.getElementById('join-button').onclick = function()  {joinScreen();};   
   
-  
   //********************************************
   //  Switch on/off the dynamic words in splash background
-  
-      // getWordCloudNames();
-  
+  // getWordCloudNames();
   //********************************************  
   
   }, false);
@@ -240,11 +250,11 @@ function showSection(sectionElement, buttonElement) {
   teamsScreen.style.display = "none";
   scoresScreen.style.display = 'none';
   roundScreen.style.display = "none";
+  document.getElementById("gameOverScreen").style.display = "none";
   document.getElementById('scoreboard').style.display =  'none';  
   document.getElementById("roundEnd-splash").style.display = "none" ;
   document.getElementById("welcomeScreen").style.display = "none";
-
-
+  
   menuHome.classList.remove('is-active');
   menuStart.classList.remove('is-active');
   menuTeams.classList.remove('is-active');
@@ -255,9 +265,6 @@ function showSection(sectionElement, buttonElement) {
   if (buttonElement) {buttonElement.classList.add('is-active');}
 }
  
-  
-
-
 //*******************************************
 // Welcome Screen Functions
 //******************************************
@@ -271,7 +278,6 @@ function getWordCloudNames(){
     document.getElementById("wordCloudNames").innerHTML = wordCloudNames.join(' '); 
     });
 };
-
 
 function delSess(sess){
 
@@ -312,12 +318,14 @@ db.collection("sessions").doc(sess).delete().then(function() {
 }
 
 function bmLogOut(){
+  
   noSleep.disable();
   document.getElementById("waitScreen").style.display = "none";
   document.getElementById("createScreen").style.display = "none";
   document.getElementById("joinScreen").style.display = "none";
   document.getElementById("createScreen").style.display = "none";
   document.getElementById("gameOverScreen").style.display = "none";
+  document.getElementById("signOutIcon").style.display = "none";  
   document.getElementById("createSuccess").style.display = "none";
   document.getElementById("roundEnd-splash").style.display = "none";
   document.getElementById("enterScreen").style.display = "none";
@@ -349,7 +357,10 @@ function bmLogOut(){
   scoresScreen.style.display = 'none';
   roundScreen.style.display = "none";
   
-  document.getElementById("turnAlert").style.display = "none";   
+  fireworks.style.display="none"
+  confetti.style.display="none"
+  
+//  document.getElementById("turnAlert").style.display = "none";   
   document.getElementById("scoreboard").style.display = "none" ;
   document.getElementById("welcomeScreen").style.display = "none"
   
@@ -362,6 +373,9 @@ function bmLogOut(){
   
   document.getElementById("page-splash").style.display = "block";
   document.getElementById("wordCloud").style.display = "block";
+  
+  
+  
 }
 
 function createScreen() {
@@ -536,22 +550,26 @@ teamCount = parseInt(teamsSelected,10)
       currentPlayerNumber = 4
       }
     
+  // Create Turns-active to listen to changes
+  
+db.collection("turns-active").doc(sessName).set({timeRoundEnd: 0, turnActive: false, currentPlayer: currentPlayer, currentTeam: currentTeam, currentTeamName: currentTeamName, currentRound: 1}).then(function() {console.log("Session successfully created!");
+      }).catch(function(error) {console.error("Error writing document: ", error);}); 
 
   
 // Create team 1
-db.collection("teams").doc(teamOne).set({teamName: teamOneName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
+db.collection("teams").doc(teamOne).set({teamName: teamOneName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
 }).catch(function(error) {console.error("Error writing document: ", error);});
 // Create team 2
-db.collection("teams").doc(teamTwo).set({teamName: teamTwoName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+db.collection("teams").doc(teamTwo).set({teamName: teamTwoName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 ,  totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
 }).catch(function(error) {console.error("Error writing document: ", error);});
 
    if (teamCount == 3) {
       
-      db.collection("sessions").doc(sessName).set({name: sessionPickedName, active: true, started: false,turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 3, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentTeamName: currentTeamName, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
+      db.collection("sessions").doc(sessName).set({name: sessionPickedName, active: true, started: false, timeRoundEnd: 0, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 3, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentTeamName: currentTeamName, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
       
       // create team 3
-      db.collection("teams").doc(teamThree).set({teamName: teamThreeName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+      db.collection("teams").doc(teamThree).set({teamName: teamThreeName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 ,  totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);});  
     
     for (var i = 0, len = playerNames.length; i < len; i++) { 
@@ -623,14 +641,14 @@ db.collection("teams").doc(teamTwo).set({teamName: teamTwoName, tpNumber: 1, ses
   }
   else if (teamCount == 4) {
         
-      db.collection("sessions").doc(sessName).set({name: sessionPickedName,active: true, started: false, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 4, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentTeamName: currentTeamName, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
+      db.collection("sessions").doc(sessName).set({name: sessionPickedName,active: true, started: false, timeRoundEnd: 0, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 4, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentTeamName: currentTeamName, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
       
       // create team 3 and 4
-      db.collection("teams").doc(teamThree).set({teamName: teamThreeName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+      db.collection("teams").doc(teamThree).set({teamName: teamThreeName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 ,  totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);});  
     
-      db.collection("teams").doc(teamFour).set({teamName: teamFourName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+      db.collection("teams").doc(teamFour).set({teamName: teamFourName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 ,  totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);});  
      
     for (var i = 0, len = playerNames.length; i < len; i++) { 
@@ -722,7 +740,7 @@ db.collection("teams").doc(teamTwo).set({teamName: teamTwoName, tpNumber: 1, ses
       
       
     //********* 2 team game  ************
-      db.collection("sessions").doc(sessName).set({name: sessionPickedName, active: true, started: false, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 2, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentTeamName: currentTeamName, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
+      db.collection("sessions").doc(sessName).set({name: sessionPickedName, active: true, started: false, timeRoundEnd: 0, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 2, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentTeamName: currentTeamName, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
     }).catch(function(error) {console.error("Error writing document: ", error);}); 
     //iterate through names and add to players to the DB
       for (var i = 0, len = playerNames.length; i < len; i++) { 
@@ -850,11 +868,10 @@ function sessionPick() {
   
     db.collection("sessions").where("name","==",sessionPickedName).get().then(function(querySnapshot) {
      querySnapshot.forEach(function(doc) {
-    sessionPicked= doc.id; 
+    sessionPicked = doc.id; 
      });
   }).then(function (activePlayers) { 
       getPlayers();
-      document.getElementById("selectPlayer").style.display = "block";
     });
  }
 
@@ -879,26 +896,13 @@ function joinGame(){
   
   hasUserEnteredNames();
   
-
-    
 }
 
-
-
-
-function showHomeScreenDetails(){
-       document.getElementById('refreshIcon').style = "animation: spin-reverse 2s infinite linear;"
+function updateHomeScreen(){
   
-var unsubscribe =  db.collection("sessions").doc(sessionPicked)
-    .onSnapshot(function(doc) {
-      
-      document.getElementById('refreshIcon').style = "animation: spin-reverse 2s infinite linear;"
-      
-      currentPlayer = doc.data().currentPlayer; 
-      currentTeam = doc.data().currentTeam;
-      currentTeamName = doc.data().currentTeamName;
-      currentRound = doc.data().currentRound;
-      turnActive = doc.data().turnActive
+    document.getElementById('refreshIcon').style = "animation: spin-reverse 2s 1 linear;"
+
+  
         document.getElementById('showNextPlayer').innerHTML =  currentPlayer;    
         document.getElementById('showNextTeam').innerHTML =  currentTeamName
         document.getElementById('showRound').innerHTML =  "Round "+currentRound      
@@ -906,7 +910,7 @@ var unsubscribe =  db.collection("sessions").doc(sessionPicked)
         document.getElementById("homeStart").style.display = "none";
         document.getElementById("homeGoInProgress").style.display = "none";
         document.getElementById("homeMyTeam").style.display = "none";
- //       document.getElementById("turnAlert").style.display = "none";      
+
         document.getElementById("homeWait").style.display = "none";    
         document.getElementById("menu-start").style.display = "none"; 
       
@@ -914,26 +918,46 @@ var unsubscribe =  db.collection("sessions").doc(sessionPicked)
       
        if (currentRound == 4){
          //if game has ended:
-            homeScreen.style.display = 'none';
-            startScreen.style.display = 'none';
-            teamsScreen.style.display = "none";
-            document.getElementById("gameOverScreen").style.display = 'block';
-            document.getElementById("endGameTrigger").style.display = "block";        
-            roundScreen.style.display = "none";         
-            showScoresScreen();  
-            enableNavBarButtons();
-            document.getElementById("roundEnd-splash").style.display = "none" ;
+          homeScreen.style.display = 'none';
+          startScreen.style.display = 'none';
+          teamsScreen.style.display = "none";
+          document.getElementById("gameOverScreen").style.display = 'block';
+          document.getElementById("signOutIcon").style.display = "block";  
+          document.getElementById("menu-goHome").style.display = "none";        
+          document.getElementById("menu-refresh").style.display = "none";  
+          document.getElementById("endGameTrigger").style.display = "block";  
+         
+         endTeamScores();
+        
+ 
+         fireworks.style.display="block"
+         var animFireworks = bodymovin.loadAnimation({
+            wrapper: fireworks,
+            animType: 'svg',
+            loop: true,
+            path: 'https://assets7.lottiefiles.com/temp/lf20_n16WIy.json'
+          });
+         
+           
+         
+         
+         //fireworks.style.display="block"
+         //fireworks.load('https://assets7.lottiefiles.com/temp/lf20_n16WIy.json');
+         
+          roundScreen.style.display = "none";         
+          
+         enableNavBarButtons();
+         document.getElementById("roundEnd-splash").style.display = "none" ;
              
             document.getElementById("menu-start").style.display = "none"; 
            // document.getElementById("turnAlert").style.display = "none";     
             menuRound.style.display = "none"
       } else  if (hasEnteredNames == true && currentPlayer == playerPicked && turnActive == false){
-        
-        //Users turn
+      //Users turn
             enableNavBarButtons();
             document.getElementById("homeStart").style.display = "block";
             document.getElementById("menu-start").style.display = "block";
-      //      openAlert();    
+      // openAlert();    
      
      } else if (currentPlayer !== playerPicked) {
 
@@ -957,22 +981,54 @@ var unsubscribe =  db.collection("sessions").doc(sessionPicked)
          } else {
           //Not users teams turn and waiting for next team to start
             document.getElementById("homeWait").style.display = "block";           
-         }
-       
-                
-     }    
-           document.getElementById('refreshIcon').style = "animation: spin-reverse 2s 1 linear;"
-});  
+         }               
+     } 
   
+  }
+
+
+function updateHomeScreenDetails(){
+ 
+    document.getElementById('refreshIcon').style = "animation: spin-reverse 2s infinite linear;"
+      
+  db.collection("turns-active").doc(sessionPicked).get().then(function(doc) {  
+      currentPlayer = doc.data().currentPlayer; 
+      currentTeam = doc.data().currentTeam;
+      currentTeamName = doc.data().currentTeamName;
+      currentRound = doc.data().currentRound;
+      turnActive = doc.data().turnActive
+      updateHomeScreen(); 
+      console.log("update function executed")
+  })                                                 
+}
+
+
+function showHomeScreenDetails(){
+    document.getElementById('refreshIcon').style = "animation: spin-reverse 2s infinite linear;"
+  
+var unsubscribeShowHome =  db.collection("turns-active").doc(sessionPicked)
+    .onSnapshot(function(doc) {
+      
+      listenShowHome = true
+      console.log("Show snapshot called")
+      
+      currentPlayer = doc.data().currentPlayer; 
+      currentTeam = doc.data().currentTeam;
+      currentTeamName = doc.data().currentTeamName;
+      currentRound = doc.data().currentRound;
+      turnActive = doc.data().turnActive
+      updateHomeScreen();
+
+  });  
 }
 
 function closeAlert() {  
-  document.getElementById("turnAlert").style.display = "none";          
-  getStartInfo();
+ // document.getElementById("turnAlert").style.display = "none";          
+ // getStartInfo();
   }
 
 function hideAlert() {  
-  document.getElementById("turnAlert").style.display = "none";          
+  //document.getElementById("turnAlert").style.display = "none";          
   }
 
   function openAlert() {
@@ -1023,17 +1079,26 @@ function hasUserEnteredNames() {
 };
 
 function checkForPlayersEnteredNames () {
+
 var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false).where("sessionName", "==", sessionPicked)
     .onSnapshot(function(querySnapshot) {
+      
+       listenCheckEntered = true
+       console.log("CheckEntered Snapshot called")
+      
+      
         var playersLeftToEnter = [];
         querySnapshot.forEach(function(doc) {
             playersLeftToEnter.push(doc.id);
         });
    document.getElementById("playersYetToEnter").innerHTML = "Players left: "+playersLeftToEnter
-   console.log("Players left: ", playersLeftToEnter.join(", "))
+  
    console.log("Count players left to enter: "+playersLeftToEnter.length)
       
       if (playersLeftToEnter.length == 0) {
+        
+        unsubscribe();
+        listenCheckEntered = false;
   
        db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
                 if (doc.exists) { gameStarted = doc.data().started;
@@ -1065,7 +1130,9 @@ var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false
 
 //When user Joins game - populate session and player functions
 function getActiveSessions () {
+  
   activeSessions = [];
+  sessionPicked = ""
   
   removeOptions(document.getElementById("selectSession"));
   
@@ -1076,7 +1143,7 @@ function getActiveSessions () {
       return activeSessions;
   }).then(function (activeSessions) {
       sessionOptions(activeSessions);
-     // $('#selectSession').not('.disabled').formSelect();    
+      document.getElementById("selectSession").style.display = "block";
     });
 };
 
@@ -1103,7 +1170,8 @@ function removeOptions(selectbox) {
 
 function getPlayers () {
     activePlayers = [];
-    
+    playerPicked = "";
+  
     removeOptions(document.getElementById("selectPlayer"));
   
     db.collection("players").where("sessionName","==",sessionPicked).get().then(function(querySnapshot) {
@@ -1113,7 +1181,7 @@ function getPlayers () {
       return activePlayers;
   }).then(function (activePlayers) {
       playerOptions(activePlayers);
-//      $('#selectPlayer').not('.disabled').formSelect();
+      document.getElementById("selectPlayer").style.display = "block";
     });
 };
 
@@ -1188,12 +1256,14 @@ function getCurrentRound() {
 };
 
 function populateTeams() {
+  
 $('li').filter(function(){return $.trim($(this).html()) == '';}).show()
-  //get Team 1 as JS Object
-   activeTeamOne = activeTeams[0];
-   activeTeamTwo = activeTeams[1];
+  
+  activeTeamOne = activeTeams[0];
+  activeTeamTwo = activeTeams[1];
   activeTeamThree = activeTeams[2];
   activeTeamFour = activeTeams[3];
+  
 db.collection("teams").doc(activeTeamOne).get().then(function(doc) {if (doc.exists) { 
   
   t1p1 = doc.data().p01
@@ -1324,8 +1394,6 @@ document.getElementById('t4p9').innerHTML = t4p9
           $('li').filter(function(){return $.trim($(this).html()) == '';}).hide()  
 } else {console.log("No such document!");}}).catch(function(error) {console.log("Error getting document:", error);}); 
 }
-
- updateScores();
  
 };
 
@@ -1492,6 +1560,7 @@ makeSPARQLQuery( endpointUrl, sparqlQuery, function( data ) {
   })
 }
 
+
 function addRandomWikiName(){
   document.getElementById(targetName).value = wikiName
   document.getElementById('wiki').src = "";
@@ -1577,6 +1646,7 @@ function getBagNames(){
  db.collection("names").where("sessionName","==",sessionPicked).where("round","==",currentRound).get().then(function(querySnapshot) {
   querySnapshot.forEach(function(doc) {bagNames.push(doc.data().bagName); });
    console.log([bagNames])
+   document.getElementById("gameStartButton").style.display = "block"; 
  });
 };
 
@@ -1611,9 +1681,11 @@ function getStartInfo () {
   
   
   db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
-    if (doc.exists) {currentRound = doc.data().currentRound;
-                     console.log("Current Round: "+currentRound);
-                     getBagNames();
+    if (doc.exists) {
+      
+                  currentRound = doc.data().currentRound;
+                  console.log("Current Round: "+currentRound);
+                  getBagNames();
                      
                   if (currentRound == 1){
                     document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 1</h5><hr><p>Describe the bag name that is randomly shown to you for your team to guess.</p><p>You can use as many words as you like without saying the name or a rhyming word</p><p>e.g. for the name James, you can't say 'Rhymes with Games', but you could say 'Rhymes with 'something'-master'!"
@@ -1646,7 +1718,7 @@ function startRound() {
  
   jokerActive = document.getElementById("activeJoker").checked;
   document.getElementById("startJoker").style.display = "none";
-  
+  document.getElementById("gameStartButton").style.display = "none";  
   
   hideAlert();
     
@@ -1667,22 +1739,34 @@ function startRound() {
   startTimer(roundTime, display);
   document.getElementById('gameShowName').innerHTML = bagNames[0]
   
- db.collection('sessions').doc(sessionPicked).update({ turnActive: true, currentPlayer: playerPicked, currentScore: 0 }).then(function() {console.log("Session player logged");
+  var roundTimeNow = parseInt(roundTime)
+  var timeNow = Date.now() 
+  timeRoundEnd = timeNow + (roundTimeNow*1000)
+
+  
+ db.collection('sessions').doc(sessionPicked).update({ timeRoundEnd: timeRoundEnd, turnActive: true, currentPlayer: playerPicked, currentScore: 0 }).then(function() {console.log("Session player logged");
 }).catch(function(error) {console.error("Error updating current player and reset score: ", error);});
+  
+ db.collection('turns-active').doc(sessionPicked).update({ timeRoundEnd: timeRoundEnd, turnActive: true, currentPlayer: playerPicked}).then(function() {console.log("Session player logged");
+}).catch(function(error) {console.error("Error updating current player and reset score: ", error);});
+  
+  
       
 };
 
+
 //Start Timer
 function startTimer(duration, display) {
+  
   shuffle(bagNames);
   turnActive = true;
   console.log(bagNames);
   countNamesLeft = bagNames.length;
     if (countNamesLeft > 1) {
-  enablePassButton();
-  } else if (countNamesLeft == 1){
-  document.getElementById('gameShowNumberLeft').innerHTML = "Last name!"
-  } 
+                              enablePassButton();
+    } else if (countNamesLeft == 1){
+                            document.getElementById('gameShowNumberLeft').innerHTML = "Last name!"
+    } 
   
   document.getElementById('gameShowNumberLeft').innerHTML = countNamesLeft - 1 + " other names left";
 
@@ -1870,22 +1954,19 @@ db.collection("sessions").doc(sessionPicked).update({lastNameGuessed: namesRemov
 
   if (jokerActive == true) {
            if (currentRound == 1){ 
-db.collection('teams').doc(teamPicked).update({ r1Score: increaseBy2 }).then(function() {console.log("r1Score increased by 2");
+db.collection('teams').doc(teamPicked).update({ r1Score: increaseBy2, totalScore: increaseBy2 }).then(function() {console.log("r1Score increased by 2");
 }).catch(function(error) {console.error("Error updating r1Score: ", error);});
 } else if (currentRound == 2) {
-db.collection('teams').doc(teamPicked).update({ r2Score: increaseBy2 }).then(function() {console.log("r2Score increased by 2");
+db.collection('teams').doc(teamPicked).update({ r2Score: increaseBy2, totalScore: increaseBy2 }).then(function() {console.log("r2Score increased by 2");
 }).catch(function(error) {console.error("Error updating r2Score: ", error);});  
 } else {
-db.collection('teams').doc(teamPicked).update({ r3Score: increaseBy2 }).then(function() {console.log("r3Score increased by 2");
+db.collection('teams').doc(teamPicked).update({ r3Score: increaseBy2, totalScore: increaseBy2 }).then(function() {console.log("r3Score increased by 2");
 }).catch(function(error) {console.error("Error updating r3Score: ", error);});  
 };  
     
 db.collection('sessions').doc(sessionPicked).update({ currentScore: increaseBy2 }).then(function() {console.log("session current score increased by 2");
 }).catch(function(error) {console.error("Error updating currentScore: ", error);});  
-  
-db.collection('teams').doc(teamPicked).update({ totalScore: increaseBy2 }).then(function() {console.log("totalScore increased by 2");
-}).catch(function(error) {console.error("Error updating totalScore: ", error);});  
-  
+   
 db.collection('players').doc(playerPicked).update({ score: increaseBy2 }).then(function() {console.log("player score increased by 2");
 }).catch(function(error) {console.error("Error updating player Score: ", error);});    
     
@@ -1894,21 +1975,18 @@ db.collection('players').doc(playerPicked).update({ score: increaseBy2 }).then(f
   else {
 //add to score of current team in current round  
        if (currentRound == 1){ 
-db.collection('teams').doc(teamPicked).update({ r1Score: increaseBy }).then(function() {console.log("r1Score increased");
+db.collection('teams').doc(teamPicked).update({ r1Score: increaseBy, totalScore: increaseBy }).then(function() {console.log("r1Score increased");
 }).catch(function(error) {console.error("Error updating r1Score: ", error);});
 } else if (currentRound == 2) {
-db.collection('teams').doc(teamPicked).update({ r2Score: increaseBy }).then(function() {console.log("r2Score increased");
+db.collection('teams').doc(teamPicked).update({ r2Score: increaseBy, totalScore: increaseBy }).then(function() {console.log("r2Score increased");
 }).catch(function(error) {console.error("Error updating r2Score: ", error);});  
 } else {
-db.collection('teams').doc(teamPicked).update({ r3Score: increaseBy }).then(function() {console.log("r3Score increased");
+db.collection('teams').doc(teamPicked).update({ r3Score: increaseBy, totalScore: increaseBy }).then(function() {console.log("r3Score increased");
 }).catch(function(error) {console.error("Error updating r3Score: ", error);});  
 };  
 
 db.collection('sessions').doc(sessionPicked).update({ currentScore: increaseBy }).then(function() {console.log("session current score increased");
 }).catch(function(error) {console.error("Error updating currentScore: ", error);});  
-  
-db.collection('teams').doc(teamPicked).update({ totalScore: increaseBy }).then(function() {console.log("totalScore increased");
-}).catch(function(error) {console.error("Error updating totalScore: ", error);});  
   
 db.collection('players').doc(playerPicked).update({ score: increaseBy }).then(function() {console.log("player score increased");
 }).catch(function(error) {console.error("Error updating player Score: ", error);});    
@@ -1924,6 +2002,9 @@ var nextWord = (function() {
    return bagNames[++count % bagNames.length];
   }
 }());
+
+
+
 
 function endRound(){
   //update last round score
@@ -2007,9 +2088,12 @@ function endRoundWithTimeLeft(){
       } else {
       document.getElementById('endRoundMessage').innerHTML = "<h5>End of the round!</h5><hr><p> That's it, no names left for this round but it's still your go! Let's tally up the scores, then you go again with the time you had left!</p><hr>"  
       };  
+  
       db.collection('sessions').doc(sessionPicked).update({ turnActive: false, currentRound: increaseBy, roundTime: timeLeftOver  }).then(function() {console.log("round end: Session round increased");
       }).catch(function(error) {console.error("Error updating r1Score: ", error);});
 
+      db.collection('turns-active').doc(sessionPicked).update({ turnActive: false, currentRound: increaseBy}).then(function() {console.log("round end: turns-active Session round increased");
+      }).catch(function(error) {console.error("Error updating r1Score: ", error);});
   
       endRound();  
       
@@ -2027,8 +2111,13 @@ function endRoundWithNamesLeft(){
      db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
         if (doc.exists) { roundTime = doc.data().roundTimeDefault;
                          console.log("Round time: "+roundTime);
+                         
                         db.collection('sessions').doc(sessionPicked).update({ turnActive: false, roundTime: roundTime }).then(function() {console.log("round end: Session round increased");
-                        }).catch(function(error) {console.error("Error updating roundTime: ", error);});                     
+                        }).catch(function(error) {console.error("Error updating roundTime: ", error);}); 
+                         
+                        db.collection('turns-active').doc(sessionPicked).update({ turnActive: false}).then(function() {console.log("round end: turns-active Session round increased");
+                        }).catch(function(error) {console.error("Error updating r1Score: ", error);});
+                         
         } else {console.log("No such document!");
       };
     });
@@ -2094,6 +2183,10 @@ function endRoundWithNamesLeft(){
 
                         db.collection('sessions').doc(sessionPicked).update({ currentTeam: nextTeam, currentTeamName: nextTeamName, currentPlayer: nextGamePlayer }).then(function() {console.log("Session player number increased");
                         }).catch(function(error) {console.error("Error updating currentPlayerNumber: ", error)});
+                      
+                        db.collection('turns-active').doc(sessionPicked).update({ currentTeam: nextTeam, currentTeamName: nextTeamName, currentPlayer: nextGamePlayer}).then(function() {console.log("turns-active session player number increased");
+                        }).catch(function(error) {console.error("Error updating r1Score: ", error);});
+                      
                       });
                     })
                     
@@ -2123,7 +2216,7 @@ function showScoresScreen() {
 
 function showRoundScreen() {
   showSection(roundScreen, menuRound)
-  liveRoundData();
+  //liveRoundData();
 
 }
 
@@ -2136,12 +2229,26 @@ function backToGameDetailsScreen() {
 //Live round screen
 //*********************
 
+
+/*
 function liveRoundData() {
 
 var unsubscribe =  db.collection("sessions").doc(sessionPicked)
     .onSnapshot(function(doc) {
-
-          
+      
+      listenCheckEntered = true
+      console.log("LiveRound Snapshot called")
+      
+      //get how long is left in round
+      timeRoundEnd = doc.data().timeRoundEnd
+      var timeNow = Date.now() 
+      var msLeft = timeRoundEnd - timeNow
+      var timeLeft = msLeft / 1000
+      console.log(timeLeft) 
+      
+      var display = document.querySelector('#liveShowTime');
+      liveTimer(timeLeft,display)
+      
      if (doc.data().turnActive == true){
        //Round active 
        if (doc.data().currentScore == 0) {
@@ -2170,9 +2277,115 @@ var unsubscribe =  db.collection("sessions").doc(sessionPicked)
     });
 }
 
+function liveTimer(duration, display) {
+  
+var timer = duration, minutes, seconds;
+var tickTock = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+ 
+        display.textContent = seconds;  
+    
+    if (timer==0){
+      document.getElementById('countdownClockMP3').play()
+      clearInterval(tickTock)
+
+      } else if (bagNames.length == 0) {  
+          // Detect that the round is up, pause timer
+        
+        
+        
+      } else {
+          --timer 
+         roundProgress = ((roundTime-timer)/roundTime)*100
+         document.getElementById("roundProgressBar").setAttribute("style","width: "+roundProgress+"%")
+    }   
+  }, 1000);
+  console.log(timer)
+};
+*/
+
+
 //************************
 //Scores screen function
 //************************
+var teamScores= []      
+var orderedTeamIDs = []   
+var orderedTeamNames = []  
+
+function endTeamScores(){
+  
+  db.collection("teams").where("sessionName", "==", sessionPicked).orderBy("totalScore","desc").get().then(function(querySnapshot){
+     
+  teamScores= []      
+  orderedTeamIDs = []   
+  orderedTeamNames = []   
+  
+    querySnapshot.forEach(function(doc) {
+          var teamID = doc.id
+          var teamName = doc.data().teamName
+          var teamScore = doc.data().totalScore
+          orderedTeamIDs.push(teamID)
+          orderedTeamNames.push(teamName)
+          teamScores.push(teamScore)
+        });
+
+    var winningMargin = teamScores[0] - teamScores[1]
+    var rankTeam = orderedTeamIDs.indexOf(teamPicked)    
+    
+    // Determine if there is an outright winner
+    if (teamScores[0] > teamScores[1]){
+      
+      document.getElementById("winningTeam").innerHTML = orderedTeamNames[0]+ " won with "+teamScores[0]+" points!"
+      
+      // Determine if my team won
+      if (rankTeam== 0) {
+        document.getElementById("winningSubText").innerHTML = "Congratulations! You won by "+winningMargin 
+        confetti.style.display="block"
+        var animConfetti = bodymovin.loadAnimation({
+            wrapper: confetti,
+            animType: 'svg',
+            loop: true,
+            path: 'https://assets9.lottiefiles.com/temp/lf20_sTumYD.json'
+          });        
+        
+      } else if (rankTeam == 1) {
+        document.getElementById("winningSubText").innerHTML = "You came 2nd with "+teamScores[1]+" points"
+      } else if (rankTeam == 2) {
+        document.getElementById("winningSubText").innerHTML = "You came 3rd with "+teamScores[2]+" points"
+      } else if (rankTeam == 3) {
+        document.getElementById("winningSubText").innerHTML = "You came 4th with "+teamScores[3]+" points" 
+      } 
+
+    } else {
+      
+     // if it's a tie, work out a tie between how many teams 
+      if (teamScores[0] == teamScores[1] && teamScores[0] == teamScores[2] && teamScores[0] == teamScores[3]) {
+        document.getElementById("winningTeam").innerHTML = "It's a 4 way tie!"
+        document.getElementById("winningSubText").innerHTML = "Everyone's a winner... sort of" 
+      } else if (teamScores[0] == teamScores[1] && teamScores[0] == teamScores[2]) {
+        document.getElementById("winningTeam").innerHTML = "It's a 3 way tie!"
+        document.getElementById("winningSubText").innerHTML = "Everyone's a winner... sort of" 
+      } else {
+        document.getElementById("winningTeam").innerHTML = orderedTeamNames[0]+" and "+orderedTeamNames[1]+" tied with "+teamScores[0]+" points!"
+          if (rankTeam == 0 || rankTeam == 1) {
+          document.getElementById("winningSubText").innerHTML = "Everyone's a winner... sort of" 
+          } else if (rankTeam == 2) {
+          document.getElementById("winningSubText").innerHTML = "You came 3rd with "+teamScores[2]+" points"
+          } else if (rankTeam == 3) {
+          document.getElementById("winningSubText").innerHTML = "You came 4th with "+teamScores[3]+" points"    
+          }
+        }
+      }
+    
+    mVP();
+    
+  })
+}
+
 
 function updateScores1(){
 /* Show teams in list order desc
@@ -2333,20 +2546,20 @@ function initializeScoreChart2 () {
     //round 1
     [{ type: "stackedColumn", showInLegend: true, color: "#00796b", name: "Round 1",
         dataPoints: [
-        { y: t1r1Score, x: 1, label: activeTeamOne},
-        { y: t2r1Score, x: 2, label:activeTeamTwo}
+        { y: t1r1Score, x: 1, label: activeTeamOneName},
+        { y: t2r1Score, x: 2, label:activeTeamTwoName}
         ]},
       { //round 2
         type: "stackedColumn",showInLegend: true,	name: "Round 2",color: "#26a69a",
         dataPoints: [
-        { y: t1r2Score, x: 1, label: activeTeamOne},
-        { y: t2r2Score, x: 2, label: activeTeamTwo}
+        { y: t1r2Score, x: 1, label: activeTeamOneName},
+        { y: t2r2Score, x: 2, label: activeTeamTwoName}
         ]},
       {  //round 3
         type: "stackedColumn", showInLegend: true, name: "Round 3",	color: "#b2dfdb",
         dataPoints: [
-        { y: t1r3Score, x: 1, label: activeTeamOne},
-        { y: t2r3Score, x: 2, label: activeTeamTwo}
+        { y: t1r3Score, x: 1, label: activeTeamOneName},
+        { y: t2r3Score, x: 2, label: activeTeamTwoName}
         ]}
     ]});
   chart.render();
@@ -2391,23 +2604,23 @@ function initializeScoreChart3 () {
     //round 1
     [{ type: "stackedColumn", showInLegend: true, color: "#00796b", name: "Round 1",
         dataPoints: [
-        { y: t1r1Score, x: 1, label: activeTeamOne},
-        { y: t2r1Score, x: 2, label:activeTeamTwo},
-        { y: t3r1Score, x: 3, label:activeTeamThree}
+        { y: t1r1Score, x: 1, label: activeTeamOneName},
+        { y: t2r1Score, x: 2, label:activeTeamTwoName},
+        { y: t3r1Score, x: 3, label:activeTeamThreeName}
         ]},
       { //round 2
         type: "stackedColumn",showInLegend: true,	name: "Round 2",color: "#26a69a",
         dataPoints: [
-        { y: t1r2Score, x: 1, label: activeTeamOne},
-        { y: t2r2Score, x: 2, label: activeTeamTwo},
-        { y: t3r2Score, x: 3, label: activeTeamThree}
+        { y: t1r2Score, x: 1, label: activeTeamOneName},
+        { y: t2r2Score, x: 2, label: activeTeamTwoName},
+        { y: t3r2Score, x: 3, label: activeTeamThreeName}
         ]},
       {  //round 3
         type: "stackedColumn", showInLegend: true, name: "Round 3",	color: "#b2dfdb",
         dataPoints: [
-        { y: t1r3Score, x: 1, label: activeTeamOne},
-        { y: t2r3Score, x: 2, label: activeTeamTwo},
-        { y: t3r3Score, x: 3, label: activeTeamThree}
+        { y: t1r3Score, x: 1, label: activeTeamOneName},
+        { y: t2r3Score, x: 2, label: activeTeamTwoName},
+        { y: t3r3Score, x: 3, label: activeTeamThreeName}
         ]}
     ]});
   
@@ -2457,26 +2670,26 @@ var largestScore = Math.max(t1TotalScore, t2TotalScore, t3TotalScore,t4TotalScor
     //round 1
     [{ type: "stackedColumn", showInLegend: true, color: "#00796b", name: "Round 1",
         dataPoints: [
-        { y: t1r1Score, x: 1, label: activeTeamOne},
-        { y: t2r1Score, x: 2, label:activeTeamTwo},
-        { y: t3r1Score, x: 3, label:activeTeamThree},
-        { y: t4r1Score, x: 4, label:activeTeamFour}
+        { y: t1r1Score, x: 1, label: activeTeamOneName},
+        { y: t2r1Score, x: 2, label:activeTeamTwoName},
+        { y: t3r1Score, x: 3, label:activeTeamThreeName},
+        { y: t4r1Score, x: 4, label:activeTeamFourName}
         ]},
       { //round 2
         type: "stackedColumn",showInLegend: true,	name: "Round 2",color: "#26a69a",
         dataPoints: [
-        { y: t1r2Score, x: 1, label: activeTeamOne},
-        { y: t2r2Score, x: 2, label: activeTeamTwo},
-        { y: t3r2Score, x: 3, label: activeTeamThree},
-        { y: t4r2Score, x: 4, label: activeTeamFour}
+        { y: t1r2Score, x: 1, label: activeTeamOneName},
+        { y: t2r2Score, x: 2, label: activeTeamTwoName},
+        { y: t3r2Score, x: 3, label: activeTeamThreeName},
+        { y: t4r2Score, x: 4, label: activeTeamFourName}
         ]},
       {  //round 3
         type: "stackedColumn", showInLegend: true, name: "Round 3",	color: "#b2dfdb",
         dataPoints: [
-        { y: t1r3Score, x: 1, label: activeTeamOne},
-        { y: t2r3Score, x: 2, label: activeTeamTwo},
-        { y: t3r3Score, x: 3, label: activeTeamThree},
-        { y: t4r3Score, x: 4, label: activeTeamFour}
+        { y: t1r3Score, x: 1, label: activeTeamOneName},
+        { y: t2r3Score, x: 2, label: activeTeamTwoName},
+        { y: t3r3Score, x: 3, label: activeTeamThreeName},
+        { y: t4r3Score, x: 4, label: activeTeamFourName}
         ]}
     ]});
   
@@ -2519,7 +2732,7 @@ menuTeams.style.display = "block"
 menuRefresh.style.display = "block"  
 }
 
-
+/*
 function gameOverMessage (){
 var t1Score
 var t2Score
@@ -2531,7 +2744,7 @@ var thirdTeam
 var fourthTeam
 var scoresObj = {}
 
-/*db.collection("teams").doc(activeTeamOne).get().then(function(doc) {if (doc.exists) { 
+db.collection("teams").doc(activeTeamOne).get().then(function(doc) {if (doc.exists) { 
    scoresObj.teamOne= doc.data().totalScore;       
      } else {console.log("No such document!");}}).catch(function(error) {console.log("Error getting document:", error);}); 
   
@@ -2558,15 +2771,19 @@ db.collection("teams").doc(activeTeamFour).get().then(function(doc) {if (doc.exi
   } else {
    document.getElementById('winners').innerHTML = winnerTeam+" won! Send them your congratulations.<br>Better luck next time"
   }
-  */  
-}
+    
+}*/
 
     
         
 function mVP(){
 
-  db.collection("players").where("sessionName", "==", sessionPicked).orderBy("score","desc")
+var unsubscribe =  db.collection("players").where("sessionName", "==", sessionPicked).orderBy("score","desc")
     .onSnapshot(function(querySnapshot) {
+    
+    listenMVP = true
+    console.log("MVP Snapshot called")
+    
     playerScores= []      
     orderedPlayerNames = []   
     querySnapshot.forEach(function(doc) {
@@ -2592,38 +2809,42 @@ function mVP(){
     // Only show MVP if there is a clear MVP
     if (playerScores[0]>playerScores[1]){
       document.getElementById('mVP').innerHTML = orderedPlayerNames[0]
-      document.getElementById('mVP').innerHTML = orderedPlayerNames[0]
+      document.getElementById('endMVP').innerHTML = "The MVP was "+orderedPlayerNames[0] + " with "+playerScores[0]+" points per turn"
       document.getElementById('mVPScore').innerHTML = playerScores[0]+"/turn"
-      console.log("MVP: "+orderedPlayerNames[0]+ " "+playerScores[0]+" per turn")
-      document.getElementById('mVPTag').style.display = "block"   
-    }
+      document.getElementById('MVP').style.display = "flex"
+      console.log("MVP: "+orderedPlayerNames[0]+ " "+playerScores[0]+" per turn")   
+   }
     
     var rank = orderedPlayerNames.indexOf(playerPicked)
       
     // Show my rank
     if(rank == 0) {
       document.getElementById('myRank').innerHTML = "1st!"
+      document.getElementById('endMyScore').innerHTML = "Congratulations champ!"
     } else if (rank == 1) {
       document.getElementById('myRank').innerHTML = "2nd"
+      document.getElementById('endMyScore').innerHTML = "You were the 2nd most valuable player with "+playerScores[1]+" points per turn"
     } else if (rank == 2) {
       document.getElementById('myRank').innerHTML = "3rd"
+      document.getElementById('endMyScore').innerHTML = "You were the 3rd most valuable player with "+playerScores[2]+" points per turn"
     } else if (rank > 2) {
       document.getElementById('myRank').innerHTML = rank+1+"th"
+      document.getElementById('endMyScore').innerHTML = "You scored "+playerScores[rank]+" points per turn"
     } 
     
        // Only show myScore if it is greater than 0
     if (playerScores[rank] > 0) {
     document.getElementById('myScore').innerHTML = playerScores[rank]+"/turn"     
-    document.getElementById('myScores').style.display = "block"
+    document.getElementById('myScores').style.display = "flex"
     } 
     
   })
 }
 
-
-
-function endGame(){
-    
+function endGame() {
+    console.log("Deactivating session");
+         fireworks.style.display="none"
+         confetti.style.display="none"
   db.collection("sessions").doc(sessionPicked).update({active: false}).then(function() {
     console.log("Session deactivated");
     alert("Session Ended")
@@ -2632,17 +2853,18 @@ function endGame(){
 
 }
 
+
 /*! NoSleep.min.js v0.9.0 - git.io/vfn01 - Rich Tibbett - MIT license */
 !function(A,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.NoSleep=e():A.NoSleep=e()}("undefined"!=typeof self?self:this,function(){return function(A){function e(B){if(o[B])return o[B].exports;var Q=o[B]={i:B,l:!1,exports:{}};return A[B].call(Q.exports,Q,Q.exports,e),Q.l=!0,Q.exports}var o={};return e.m=A,e.c=o,e.d=function(A,o,B){e.o(A,o)||Object.defineProperty(A,o,{configurable:!1,enumerable:!0,get:B})},e.n=function(A){var o=A&&A.__esModule?function(){return A.default}:function(){return A};return e.d(o,"a",o),o},e.o=function(A,e){return Object.prototype.hasOwnProperty.call(A,e)},e.p="",e(e.s=0)}([function(A,e,o){"use strict";function B(A,e){if(!(A instanceof e))throw new TypeError("Cannot call a class as a function")}var Q=function(){function A(A,e){for(var o=0;o<e.length;o++){var B=e[o];B.enumerable=B.enumerable||!1,B.configurable=!0,"value"in B&&(B.writable=!0),Object.defineProperty(A,B.key,B)}}return function(e,o,B){return o&&A(e.prototype,o),B&&A(e,B),e}}(),t=o(1),n=t.webm,c=t.mp4,E="undefined"!=typeof navigator&&parseFloat((""+(/CPU.*OS ([0-9_]{3,4})[0-9_]{0,1}|(CPU like).*AppleWebKit.*Mobile/i.exec(navigator.userAgent)||[0,""])[1]).replace("undefined","3_2").replace("_",".").replace("_",""))<10&&!window.MSStream,l=function(){function A(){var e=this;B(this,A),E?this.noSleepTimer=null:(this.noSleepVideo=document.createElement("video"),this.noSleepVideo.setAttribute("muted",""),this.noSleepVideo.setAttribute("title","No Sleep"),this.noSleepVideo.setAttribute("playsinline",""),this._addSourceToVideo(this.noSleepVideo,"webm",n),this._addSourceToVideo(this.noSleepVideo,"mp4",c),this.noSleepVideo.addEventListener("loadedmetadata",function(){e.noSleepVideo.duration<=1?e.noSleepVideo.setAttribute("loop",""):e.noSleepVideo.addEventListener("timeupdate",function(){e.noSleepVideo.currentTime>.5&&(e.noSleepVideo.currentTime=Math.random())})}))}return Q(A,[{key:"_addSourceToVideo",value:function(A,e,o){var B=document.createElement("source");B.src=o,B.type="video/"+e,A.appendChild(B)}},{key:"enable",value:function(){E?(this.disable(),console.warn("\n        NoSleep enabled for older iOS devices. This can interrupt\n        active or long-running network requests from completing successfully.\n        See https://github.com/richtr/NoSleep.js/issues/15 for more details.\n      "),this.noSleepTimer=window.setInterval(function(){document.hidden||(window.location.href=window.location.href.split("#")[0],window.setTimeout(window.stop,0))},15e3)):this.noSleepVideo.play()}},{key:"disable",value:function(){E?this.noSleepTimer&&(console.warn("\n          NoSleep now disabled for older iOS devices.\n        "),window.clearInterval(this.noSleepTimer),this.noSleepTimer=null):this.noSleepVideo.pause()}}]),A}();A.exports=l},function(A,e,o){"use strict";A.exports={webm:"data:video/webm;base64,GkXfo0AgQoaBAUL3gQFC8oEEQvOBCEKCQAR3ZWJtQoeBAkKFgQIYU4BnQI0VSalmQCgq17FAAw9CQE2AQAZ3aGFtbXlXQUAGd2hhbW15RIlACECPQAAAAAAAFlSua0AxrkAu14EBY8WBAZyBACK1nEADdW5khkAFVl9WUDglhohAA1ZQOIOBAeBABrCBCLqBCB9DtnVAIueBAKNAHIEAAIAwAQCdASoIAAgAAUAmJaQAA3AA/vz0AAA=",mp4:"data:video/mp4;base64,AAAAIGZ0eXBtcDQyAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAACKBtZGF0AAAC8wYF///v3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE0MiByMjQ3OSBkZDc5YTYxIC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAxNCAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTEgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MToweDExMSBtZT1oZXggc3VibWU9MiBwc3k9MSBwc3lfcmQ9MS4wMDowLjAwIG1peGVkX3JlZj0wIG1lX3JhbmdlPTE2IGNocm9tYV9tZT0xIHRyZWxsaXM9MCA4eDhkY3Q9MCBjcW09MCBkZWFkem9uZT0yMSwxMSBmYXN0X3Bza2lwPTEgY2hyb21hX3FwX29mZnNldD0wIHRocmVhZHM9NiBsb29rYWhlYWRfdGhyZWFkcz0xIHNsaWNlZF90aHJlYWRzPTAgbnI9MCBkZWNpbWF0ZT0xIGludGVybGFjZWQ9MCBibHVyYXlfY29tcGF0PTAgY29uc3RyYWluZWRfaW50cmE9MCBiZnJhbWVzPTMgYl9weXJhbWlkPTIgYl9hZGFwdD0xIGJfYmlhcz0wIGRpcmVjdD0xIHdlaWdodGI9MSBvcGVuX2dvcD0wIHdlaWdodHA9MSBrZXlpbnQ9MzAwIGtleWludF9taW49MzAgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD0xMCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIwLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IHZidl9tYXhyYXRlPTIwMDAwIHZidl9idWZzaXplPTI1MDAwIGNyZl9tYXg9MC4wIG5hbF9ocmQ9bm9uZSBmaWxsZXI9MCBpcF9yYXRpbz0xLjQwIGFxPTE6MS4wMACAAAAAOWWIhAA3//p+C7v8tDDSTjf97w55i3SbRPO4ZY+hkjD5hbkAkL3zpJ6h/LR1CAABzgB1kqqzUorlhQAAAAxBmiQYhn/+qZYADLgAAAAJQZ5CQhX/AAj5IQAD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"}}])});
 
-   var noSleep = new NoSleep();
-      var wakeLockEnabled = false;
-      var toggleEl = document.querySelector("#join-button");
-      toggleEl.addEventListener('click', function() {
-        console.log('a')
-        if (!wakeLockEnabled) {
+var noSleep = new NoSleep();
+var wakeLockEnabled = false;
+var toggleEl = document.querySelector("#join-button");
+    
+toggleEl.addEventListener('click', function() {
+          if (!wakeLockEnabled) {
           noSleep.enable(); // keep the screen on!
           wakeLockEnabled = true;
           console.log("No Sleep Enabled")
         } 
-      }, false);
+}, false);
