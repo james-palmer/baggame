@@ -1,10 +1,9 @@
 html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
-    height: 100vh;
 }
 
-html {
-   height: 100vh;
+.screen {
+      height: calc(100vh - 80px);
 }
 
 body
@@ -127,13 +126,19 @@ h6{
  }
 
 #splashLogo{
-  transform: rotate(-30deg);
+/*
+  transform: rotate(-30deg); 
+*/
   width:250px; 
   height:250px;
   position: fixed;
   bottom: -55px;
   right: -15px;
   z: -100;
+
+  x-transition: all 1s ease-in-out;
+  animation: animateLogo 10s infinite;
+  
 }
 
 #start-splash {
@@ -146,9 +151,6 @@ h6{
     align-items: center;
     flex-direction: column;
 }
-
-
-
 
 
 /* Nav bar */
@@ -345,6 +347,22 @@ h6{
         transform: rotate(-405deg);
     }
 }
+
+@keyframes animateLogo {
+  0% {
+    left: -10%;
+		transform: rotate(30deg)
+  }
+  50% {
+    left: 50%;
+		transform: rotate(-30deg)
+  }
+  100% {
+    left: -10%;
+		transform: rotate(30deg)
+  }
+}
+
 
 /***************/
 
@@ -554,7 +572,6 @@ h6{
 }
 
 #welcomeScreen h4{
-
   padding:20px; 
 }
 

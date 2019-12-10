@@ -25,6 +25,12 @@
   <meta name="msapplication-TileColor" content="#3372DF">
   <meta name="msapplication-navbutton-color" content="#303F9F">
 
+  <!-- manifest and icons -->
+<link rel="manifest" href="public/manifest.json">
+<meta name="theme-color" content="#009688">
+<link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
+<link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
+  
 <!-- Bootstrap-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -33,34 +39,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script> 
 
-  
-<!-- manifest and icons -->
-<link rel="manifest" href="public/manifest.json">
-<meta name="theme-color" content="#009688">
-<link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
-<link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
- 
-<!--force HTTPS redirect -->
-<script> if (location.protocol != 'https:')
-{
- location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+ <!--force HTTPS redirect -->
+<script>
+if (location.protocol != 'https:')
+{location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
  console.log("redirected to HTTPS")
-} else {
- console.log("HTTPS") 
-}</script>
-  
-<link rel="stylesheet" href="public/main.css">
-  
-   <!-- Firebase -->
+} else {console.log("HTTPS")}
+</script>
+    
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
-
-  <script>
-  // Web app's Firebase configuration
+<script>
   var firebaseConfig = {
     apiKey: "AIzaSyBuXyvgX4mBbFB-NfLK3HYE88_6h_4-5Tg",
     authDomain: "bagminge.firebaseapp.com",
@@ -70,27 +64,26 @@
     messagingSenderId: "492822420231",
     appId: "1:492822420231:web:abb6b44b182e7c37"
   };
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);    
 </script>
-  
 
+<!-- Lottie animation library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="public/main.css">
+  
 </head>
+  
 <body>
 
-
-<main>
-
-  <!--preload sounds-->
+<!--preload sounds-->
   <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
   
   <audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
   
   <audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
   
-  <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio>
-  
-  
+  <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio> 
   
 <!--*****************************    
 Welcome splash screen 
@@ -104,7 +97,8 @@ Welcome splash screen
       <div class="row">
         <h1>BAG GAME</h1>
       </div>
-       
+      
+ 
     <div class="row">
       <button id="join-button" class="splashButtons btn btn-primary"><i class="fa fa-users"></i><a>JOIN A GAME</a></button>
       <button id="create-button" onclick="createScreen()" class="splashButtons btn btn-primary"><i class="fa fa-pencil"></i><a>SETUP NEW GAME</a></button>
@@ -130,7 +124,8 @@ Welcome splash screen
         <a id="menu-teams"  style="display: block" class=""><i class="fa fa-users"></i></a>
         <a id="menu-scores" style="display: block" class=""><i class="fa fa-trophy"></i></a>
         <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>
-        <a id="menu-refresh"  style="display: block" class=""><i id="refreshIcon" class="fa fa-refresh"></i></a>   
+        <a id="menu-refresh"  style="display: block" class=""><i id="refreshIcon" class="fa fa-refresh"></i></a>
+        <a id="menu-exit"  style="display: block" class=""><i id="signOutIcon" class="fas fa-sign-out-alt"></i></a>   
    </div>
   
   <nav class="navbar navbar-inverse">
@@ -160,15 +155,37 @@ Welcome splash screen
   </div>
        
   
+<main>
     <!-- GAME OVER SCREEN
 **************************-->
 <section id="gameOverScreen" style="display:none">
   <div class="container" >  
      <div class="row" >
        <h3 type="text" id="gameOver" style="width:100%; text-align:center; font-weight: bold; padding-top: 20px;">GAME OVER!</h3>
-      </div>
+    </div>
+    <hr>
+    <div class="row">
+       <h2 style="width:100%; text-align:center;" id="winningTeam"></h2>
+    </div>
+     <div class="row" >
+       <p style="width:100%; text-align:center;" id="winningSubText" ></p>
+    </div>
+    <hr>
+    <div class="row" >   
+       <p style="width:100%; text-align:center;" id="endMVP"></p>
+    </div>
+    <div class="row">
+       <p style="width:100%; text-align:center;" id="endMyScore"></p>
+    </div>
     </div> 
 </section>  
+  
+  
+<div id="confetti"  style="display: none; width:100vw; height: 90vh; position: fixed; top: 0; left:0;"></div>
+  
+  
+<div id="fireworks" style="display: none; width:100vw; height: 40vh; position: fixed; bottom: 10vh; left:0;"> </div>
+  
   
 <!--*****************************  
 create new game screen 
@@ -198,15 +215,15 @@ create new game screen
     <div class="input-group mb-3" id="numberOfNames">
        <select class="custom-select" id="createNameCount">
          <option value="" selected disabled>How many names per person?</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-      <option>6</option>
-      <option>7</option>
-      <option>8</option>
-      <option>9</option>
-      <option>10</option>
-       </select>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        </select>
     </div>
     
     <div class="input-group mb-3" id="numberOfTeams">
@@ -294,7 +311,7 @@ Join game screen
    <hr>
       
  <div class="input-group mb-3" id="session">
-  <select class="custom-select" id="selectSession" onchange="sessionPick()">
+  <select class="custom-select" id="selectSession" style="display:none" onchange="sessionPick()">
     <option value="" selected disabled>Please select a session</option>
   </select>
 </div>
@@ -365,7 +382,9 @@ Welcome Screen - basic info at the start
       <h5>
        You're on the <span id="welcomeTeam" style="font-weight: bold; color:teal"></span> team, join up with your teammates now!
       </h5>
-      <hr>
+    </div>
+   <hr>
+    <div>
       <h5>
        <span id="upNextPlayer" style="font-weight: bold; color:teal"></span> from the  <span id="upNextTeam" style="font-weight: bold; color:teal"></span> team is up next!
       </h5> 
@@ -471,7 +490,7 @@ start screen
    <h5>Are you ready <span id="startShowPlayer"></span>?</h5>
     <hr>
       
-    <button id="gameStartButton" onclick="startRound()" class="btn btn-primary aboveNavButton" style="background-color:#e57373" >Start your turn!</button>
+    <button id="gameStartButton" onclick="startRound()" class="btn btn-primary aboveNavButton" style="background-color:#e57373; display:none" >Start your turn!</button>
   </div>
   </section>
 </section>
@@ -485,7 +504,8 @@ start screen
    <div class="container">
     <div class="row" >
       <a type="text" id="gameShowName" style="text-align:center;width:100%; padding:50px 0px 0px 0px; font-size: 6vh; ">bag name</a>
-      <a id="gameGotPassButton"  onclick="gameGotPassButton()" style="text-align: center; width:100%; display:block"><i id="gameShowNamePassed" style="font-size: 1.2em; width:100%; text-align:center; color: red">passed bag name </i><i class="fas fa-thumbs-up" style="font-size:15pt; color:red"></i></a>
+      
+      <a id="gameGotPassButton"  onclick="gameGotPassButton()" style="text-align: center; width:100%; display:block"><i id="gameShowNamePassed" style="font-size: 1.2em; width:100%; text-align:center; color: red">passed bag name </i><i class="fas fa-thumbs-up" style="font-size:15pt; color:red;  padding:0 0 0 10px;"></i></a>
     </div>
           
     <div class="row">
@@ -651,9 +671,9 @@ start screen
 **************************-->
   <div class="container">  
       <div id="scoreboard" style="display:none">
-        <h2 style="text-align:center">
+       <!-- <h2 style="text-align:center">
           Scoreboard
-        </h2>
+        </h2>-->
           <div class="row scoreboard scores1" id="gridOne">
             <div class="col-10" id="scoreGridTeamOne">TEAM A</div>
             <div class="col-2" id="scoreGridTeamOneScore">-</div>
@@ -890,7 +910,7 @@ start screen
   </section>
 
 
- <div class="modal fade" id="wikiNameModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal fade" id="wikiNameModal"  tabindex="-1" role="dialog" aria-labelledby="wikiModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content" style="height:80vh; align:center;">
       <div class="modal-header">
@@ -900,7 +920,7 @@ start screen
         </button>
       </div>
       <div class="modal-body" >
-           <iframe id="wiki" style="border:none" height="100%" width="auto"></iframe>
+           <iframe id="wiki" style="border:none" height="100%" width="100%"></iframe>
              <div id="wikiWait">
                 <div class="row">
                     <div class="col-md-12">
@@ -921,12 +941,12 @@ start screen
                     </div>
                 </div>   
               </div> 
+        </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-dark" onclick="getRandomWikiName()">Pick another</button>
             <button type="button" class="btn btn-success" onclick="addRandomWikiName()" data-dismiss="modal">Add name</button>
         </div>
       </div>
-    </div>
    </div>
 </div>
 
@@ -935,43 +955,46 @@ start screen
 END GAME BUTTONS AND CONFIRMS
 **********************-->
   <!-- Modal Trigger -->
-  <button id="endGameTrigger" style="display:none" class="btn btn-danger btn-circle endGameTrigger modal-trigger" data-target="endGame">
+  <button id="endGameTrigger" style="display:none" class="btn btn-danger btn-circle endGameTrigger" data-toggle="modal" data-target="#endGame">
     <span aria-hidden="true">&times;</span>
   </button>
         
+
   <!-- Modal Structure -->
   <div id="endGame" class="modal fade">
+    <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <h4>End Game</h4>
-      <p>You are about to deactivate the <span id="endGameSession"></span> session.</p>
-      <p>This will remove access to the session, and all information, for you and all players.</p>
-      <p>Are you sure you want to deactivate the session?</p>
-    </div>
+      <div class="modal-header">
+        <h5 class="modal-title">End Game</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+        <p>You are about to deactivate the <span id="endGameSession"></span> session.</p>
+        <p>This will remove access to the session, and all information, for you and all players.</p>
+        <p>Are you sure you want to deactivate the session?</p>
+      </div>
     <div class="modal-footer">
-      <button href="#!" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      <button href="#!" onclick="endGame()" class="btn btn-danger" data-dismiss="modal">Deactivate</button>
+      <button class="btn btn-dark" data-dismiss="modal">Cancel</button>
+      <button type="button" onclick="endGame()" class="btn btn-danger" data-dismiss="modal">Deactivate</button>
     </div>
-  </div>     
+    </div>
+  </div>   
+</div>
 
 <!--**********************************-->
  
+
+
 </main>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js').then(function (registration) {
-            console.log('Service worker successfully registered on scope', registration.scope);
-        }).catch(function (error) {
-            console.log('Service worker failed to register');
-        });
-    });
-}
-</script>
-<script src="public/scripts/main.js"></script>
-<script src="/sw.js"></script>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>             
-
 </body>
+
+<script src="public/scripts/main.js"></script>
+<!--
+<script src="public/sw.js"></script>
+-->
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
 
 </html>

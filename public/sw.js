@@ -1,3 +1,13 @@
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('public/sw.js').then(function (registration) {
+            console.log('Service worker successfully registered on scope', registration.scope);
+        }).catch(function (error) {
+            console.log('Service worker failed to register');
+        });
+    });
+}
+
 var cacheName = 'bagApp';
 var filesToCache = [
   '/',
@@ -22,12 +32,4 @@ self.addEventListener('fetch', event => {
       return response || fetch(event.request);
     })
   );
-});
-
-self.addEventListener('install', function(event) {
-    console.log('Installed sw.js', event);
-});
-
-self.addEventListener('activate', function(event) {
-    console.log('Activated sw.js', event);
 });
