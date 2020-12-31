@@ -1,5 +1,5 @@
 <!doctype html>
-<!--Copyright James Palmer 2021 -->
+<!--Copyright James Palmer 2019 -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -42,13 +42,13 @@
 <script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script> 
 
  <!--force HTTPS redirect -->
-<!--<script>
+<script>
 if (location.protocol != 'https:')
 {location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
  console.log("redirected to HTTPS")
 } else {console.log("HTTPS")}
 </script>
--->    
+    
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
@@ -70,40 +70,29 @@ if (location.protocol != 'https:')
 <!-- Lottie animation library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js" crossorigin="anonymous"></script>
 
-
-<script src="public/scripts/main.js"></script>
-<!--
-<script src="public/sw.js"></script>
--->
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
-
 <link rel="stylesheet" href="public/main.css">
-
-<!--preload sounds-->
-<audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
   
-<audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
-
-<audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
-
-<audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio> 
-
-
 </head>
   
 <body>
 
-
+<!--preload sounds-->
+  <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
+  
+  <audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
+  
+  <audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
+  
+  <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio> 
+  
 <!--*****************************    
 Welcome splash screen 
 **************************-->
-  <section id="wordCloud" style="display:none">
- <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
-  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
-  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell</p>
+  <section id="wordCloud" style="display:block">
+ <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell</p>
   </section>
     
-  <section id="page-splash" style="display:none">
+  <section id="page-splash" style="display:block">
     <div class="container">
       <div class="row">
         <h1>BAG GAME</h1>
@@ -111,7 +100,7 @@ Welcome splash screen
       
  
     <div class="row">
-      <button id="join-button" class="splashButtons btn btn-primary"><i class="fa fa-users"></i><a style="text-align: center;">JOIN A GAME</a></button>
+      <button id="join-button" class="splashButtons btn btn-primary"><i class="fa fa-users"></i><a>JOIN A GAME</a></button>
       <button id="create-button" onclick="createScreen()" class="splashButtons btn btn-primary"><i class="fa fa-pencil"></i><a>SETUP NEW GAME</a></button>
     </div>
    </div>   
@@ -589,29 +578,28 @@ start screen
   <!-- Show teams screen 
 *****************************-->
   
-<section id="teamsScreen" style="display:block">  
+<section id="teamsScreen" style="display:none">  
   
   
 <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
-  <li class="nav-item" style="background-color: red !important">
-    <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link teamNav active">RED TEAM</a>
+  <li class="nav-item">
+    <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link active">Team 1</a>
   </li>
   <li class="nav-item">
-    <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link teamNav">BLUE TEAM</a>
+    <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link">Team 2</a>
   </li>
   <li class="nav-item">
-     <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link teamNav">ORANGE TEAM</a>
+     <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link">Team 3</a>
   </li>
   <li class="nav-item">
-    <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link teamNav">PURPLE TEAM</a>
+    <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link">Team 4</a>
   </li>
 </ul>
   
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="teamShowTeamOne" role="tabpanel" aria-labelledby="teamOne">
-      <div style="color: red" class="teams">
-        <h2 id="showTeamOneName">RED TEAM</h2>
-        <i class="fa fa-users teamLogos" aria-hidden="true"></i>
+      <div class="teams">
+        <h2 id="showTeamOneName">TEAM ONE</h2>
         <ul>
           <li id="t1p1">1</li>
           <li id="t1p2">2</li>
@@ -626,9 +614,8 @@ start screen
      </div> 
   </div>
   <div class="tab-pane fade" id="teamShowTeamTwo" role="tabpanel" aria-labelledby="teamTwo">
-      <div style="color: blue" class="teams">
-      <h2 id="showTeamTwoName">BLUE TEAM</h2>
-      <i class="fa fa-users teamLogos" aria-hidden="true"></i>
+      <div class="teams">
+      <h2 id="showTeamTwoName">TEAM TWO</h2>
         <ul>
         <li id="t2p1">asd</li>
         <li id="t2p2">asdasdasd</li>
@@ -643,9 +630,8 @@ start screen
      </div>    
   </div>
   <div class="tab-pane fade" id="teamShowTeamThree" role="tabpanel" aria-labelledby="teamThree" >
-      <div style="color: rgb(221, 144, 1)" class="teams">
-        <h2 id="showTeamThreeName">ORANGE TEAM</h2>
-        <i class="fa fa-users teamLogos" aria-hidden="true"></i>
+      <div class="teams">
+        <h2 id="showTeamThreeName">TEAM THREE</h2>
         <ul>
         <li id="t3p1"></li>
         <li id="t3p2"></li>
@@ -660,9 +646,8 @@ start screen
       </div>    
   </div>
   <div class="tab-pane fade" id="teamShowTeamFour" role="tabpanel" aria-labelledby="teamFour">
-      <div style="color: purple" class="teams">
-       <h2 id="showTeamFourName">PURPLE TEAM</h2>
-       <i class="fa fa-users teamLogos" aria-hidden="true"></i>
+      <div class="teams">
+       <h2 id="showTeamFourName">TEAM FOUR</h2>
         <ul>
         <li id="t4p1"></li>
         <li id="t4p2"></li>
@@ -690,22 +675,22 @@ start screen
           Scoreboard
         </h2>-->
           <div class="row scoreboard scores1" id="gridOne">
-            <div class="col-10" id="scoreGridTeamOne">RED TEAM</div>
+            <div class="col-10" id="scoreGridTeamOne">TEAM A</div>
             <div class="col-2" id="scoreGridTeamOneScore">-</div>
           </div>
           <div class="row scoreboard scores2" id="gridTwo">
-            <div class="col-10" id="scoreGridTeamTwo">BLUE TEAM</div>
+            <div class="col-10" id="scoreGridTeamTwo">TEAM B</div>
             <div class="col-2" id="scoreGridTeamTwoScore">-</div>
           </div>
           <div id="gridThree" style="display:none">
             <div class="row scoreboard scores1"> 
-              <div class="col-10" id="scoreGridTeamThree">ORANGE TEAM</div>
+              <div class="col-10" id="scoreGridTeamThree">TEAM C</div>
               <div class="col-2" id="scoreGridTeamThreeScore">25</div>
             </div>
           </div>
           <div  id="gridFour" style="display:none">
             <div class="row scoreboard scores2"> 
-              <div class="col-10" id="scoreGridTeamFour">PURPLE TEAM</div>
+              <div class="col-10" id="scoreGridTeamFour">TEAM D</div>
               <div class="col-2" id="scoreGridTeamFourScore">-</div>
             </div>
           </div>
@@ -1006,5 +991,10 @@ END GAME BUTTONS AND CONFIRMS
 
 </body>
 
+<script src="public/scripts/main.js"></script>
+<!--
+<script src="public/sw.js"></script>
+-->
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
 
 </html>
