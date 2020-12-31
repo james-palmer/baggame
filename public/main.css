@@ -65,8 +65,9 @@ a {
   left:10%;
   margin: 20px 0px;
   position: relative;
-  display: flex;
-  text-align: left;
+  display: flex;  
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
   background-color: rgba(0,128,128,0.9);
   border: solid 2px #b2dfdb;
@@ -152,6 +153,12 @@ h6{
     flex-direction: column;
 }
 
+.btn-primary:hover {
+  background-color: #B2DFDB;
+  border: teal;
+  color: teal;
+
+}
 
 /* Nav bar */
 
@@ -390,6 +397,17 @@ h6{
   height:8vh
     
  }
+
+.teamNav {
+width: 25%;
+
+}
+
+.teamLogos {
+font-size: 15vw;
+
+
+}
 
 .nav-pills .nav-link.active {
   background-color: #b2dfdb;
