@@ -41,14 +41,15 @@
 
 <script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script> 
 
- <!--force HTTPS redirect -->
+ <!--force HTTPS redirect
 <script>
 if (location.protocol != 'https:')
 {location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
  console.log("redirected to HTTPS")
 } else {console.log("HTTPS")}
 </script>
-    
+-->
+
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
@@ -88,11 +89,11 @@ if (location.protocol != 'https:')
 <!--*****************************    
 Welcome splash screen 
 **************************-->
-  <section id="wordCloud" style="display:block">
+  <section id="wordCloud" style="display:none">
  <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell</p>
   </section>
     
-  <section id="page-splash" style="display:block">
+  <section id="page-splash" style="display:none">
     <div class="container">
       <div class="row">
         <h1>BAG GAME</h1>
@@ -578,27 +579,24 @@ start screen
   <!-- Show teams screen 
 *****************************-->
   
-<section id="teamsScreen" style="display:none">  
-  
+<section id="teamsScreen" style="display:block">  
+
   <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
-    <li class="nav-item">
-      <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link active">Team 1</a>
     <li class="nav-item" style="background-color: red !important">
       <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link teamNav active">RED TEAM</a>
     </li>
     <li class="nav-item">
-      <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link">Team 2</a>
       <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link teamNav">BLUE TEAM</a>
     </li>
     <li class="nav-item">
-       <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link">Team 3</a>
        <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link teamNav">ORANGE TEAM</a>
     </li>
     <li class="nav-item">
-      <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link">Team 4</a>
       <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link teamNav">PURPLE TEAM</a>
     </li>
   </ul>
+-->
+
 
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="teamShowTeamOne" role="tabpanel" aria-labelledby="teamOne">
@@ -622,6 +620,7 @@ start screen
     <div style="color: blue" class="teams">
       <h2 id="showTeamTwoName">BLUE TEAM</h2>
       <i class="fa fa-users teamLogos" aria-hidden="true"></i>
+      <ul>
         <li id="t2p1">asd</li>
         <li id="t2p2">asdasdasd</li>
         <li id="t2p3">sfdad</li>
@@ -631,7 +630,7 @@ start screen
         <li id="t2p7"></li>
         <li id="t2p8" ></li>
         <li id="t2p9"></li>
-        </ul>  
+      </ul>  
      </div>    
   </div>
   <div class="tab-pane fade" id="teamShowTeamThree" role="tabpanel" aria-labelledby="teamThree" >
