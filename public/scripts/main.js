@@ -2216,7 +2216,7 @@ function showScoresScreen() {
 
 function showRoundScreen() {
   showSection(roundScreen, menuRound)
-  //liveRoundData();
+  liveRoundData();
 
 }
 
