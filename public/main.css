@@ -394,13 +394,18 @@ h6{
   color:white;
  position: absolute;
  bottom: 10vh;
-  height:8vh;
-  width: 25%;
+  height:8vh
+    
  }
 
+.teamNav {
+width: 25%;
+
+}
 
 .teamLogos {
-font-size: 10em;
+font-size: 15vw;
+
 
 }
 
