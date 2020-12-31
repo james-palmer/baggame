@@ -381,6 +381,13 @@ h6{
   font-size: 1.3em;
 }
 
+.btn-primary:hover {
+  background-color: #B2DFDB;
+  border: teal;
+  color: teal;
+
+}
+
 
 .nav-link {
  background-color: teal;
@@ -397,6 +404,18 @@ h6{
   color: black;
   font-weight: bold;
 }
+
+.teamNav {
+  width: 25%;
+  
+  }
+  
+  .teamLogos {
+  font-size: 15vw;
+  
+  
+  }
+  
 
 .homeButtons button {
  
