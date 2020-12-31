@@ -952,7 +952,7 @@ function updateHomeScreen(){
             document.getElementById("menu-start").style.display = "none"; 
            // document.getElementById("turnAlert").style.display = "none";     
             menuRound.style.display = "none"
-      } else  if (hasEnteredNames == true && currentPlayer == playerPicked && turnActive == false){
+      } else  if (currentPlayer == playerPicked && turnActive == false){
       //Users turn
             enableNavBarButtons();
             document.getElementById("homeStart").style.display = "block";
