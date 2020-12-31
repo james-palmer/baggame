@@ -469,7 +469,7 @@ function getFriendlyTeams() {
   });
 
 document.getElementById('addPlayerName').addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
+  if (event.key === 'Enter') {
     event.preventDefault();
     document.getElementById("addPlayer").click();
   }
