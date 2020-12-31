@@ -2230,7 +2230,7 @@ function backToGameDetailsScreen() {
 //*********************
 
 
-/*
+
 function liveRoundData() {
 
 var unsubscribe =  db.collection("sessions").doc(sessionPicked)
@@ -2306,7 +2306,7 @@ var tickTock = setInterval(function () {
   }, 1000);
   console.log(timer)
 };
-*/
+
 
 
 //************************
