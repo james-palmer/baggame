@@ -41,14 +41,14 @@
 
 <script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script> 
 
- <!--force HTTPS redirect-->
+ <!--force HTTPS redirect-
 <script>
 if (location.protocol != 'https:')
 {location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
  console.log("redirected to HTTPS")
 } else {console.log("HTTPS")}
 </script>
-<!---->
+-->
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
@@ -383,6 +383,7 @@ Welcome Screen - basic info at the start
       <h4>
          Welcome to your <span id="welcomeSession"></span> game of Bag Minge, <span id="welcomePlayer"></span>!
       </h4>
+      <br>
       <h5>
        You're on the <span id="welcomeTeam" style="font-weight: bold; color:teal"></span> team, join up with your teammates now!
       </h5>
@@ -732,25 +733,24 @@ start screen
   <div class="container" >  
      <div class="row">
        <br>
-       <div id="turnStatus" class="turnStatus">
+       <div id="turnStatus" class="turnStatus" style="display:block">
          <h5>No turn in progress</h5>
        </div>
     </div>
     <div class="row">
        <div id="turnInProgress" class="turnInProgress" style="display:none">
            <h5 type="text" id="roundTeam" style="width:100%"></h5>
-      </div>
-      <div class="row">
+           <hr>
            <h5 type="text" id="roundPlayer" style="width:100%"></h5>
-       </div>
     </div>
     <div class="row">
        <div id="turnInProgressNameScore" class="turnInProgressNameScore" style="display:none">
         <div class="row">   
-         <h5 type="text" id="roundScoreNow"  style="width:100%"></h5>
+         <h3 type="text" id="roundScoreNow"  style="width:100%">-</h3>
         </div>
+        <hr>
          <div class="row">
-           <h5 type="text" id="lastNameGuessed"  style="width:100%"></h5>
+           <h3 type="text" id="lastNameGuessed"  style="width:100%">-</h3>
        </div>
       </div>
     </div>

@@ -66,7 +66,8 @@ a {
   margin: 20px 0px;
   position: relative;
   display: flex;
-  text-align: left;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
   background-color: rgba(0,128,128,0.9);
   border: solid 2px #b2dfdb;
@@ -78,7 +79,6 @@ a {
   text-align:center;
   padding: 20px;
   background-color: #e57373;
-  border: #f4433;
   border-radius: 0 100px 100px 0;
 }  
 
@@ -421,7 +421,7 @@ h6{
  
   padding: 20px;
   background-color: #e57373;
-  border: #f4433;
+  border: white;
 }  
 
 .homeButtons i {
@@ -776,8 +776,9 @@ padding: 10px;
   bottom: 10vh;
   left: 20%;
   z-index: 55000;
+
   p {
-    font-size: 45px
+    font-size: 45px;
   }
 }
 
