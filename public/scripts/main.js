@@ -856,6 +856,7 @@ function createBack() {
   document.getElementById("page-splash").style.display = "block";
   document.getElementById("wordCloud").style.display = "block";
   document.getElementById("createScreen").style.display = "none";
+  location.reload()
 }  
 
 //***************************************
