@@ -375,6 +375,7 @@ function bmLogOut(){
   document.getElementById("wordCloud").style.display = "block";
   
   location.reload()
+  console.log("Logged Out and Page Reloaded")
   
 }
 
@@ -857,6 +858,7 @@ function createBack() {
   document.getElementById("wordCloud").style.display = "block";
   document.getElementById("createScreen").style.display = "none";
   location.reload()
+  console.log("Reloaded")
 }  
 
 //***************************************
