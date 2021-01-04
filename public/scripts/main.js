@@ -374,7 +374,7 @@ function bmLogOut(){
   document.getElementById("page-splash").style.display = "block";
   document.getElementById("wordCloud").style.display = "block";
   
-  
+  location.reload()
   
 }
 
