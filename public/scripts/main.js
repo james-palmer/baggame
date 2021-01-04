@@ -492,6 +492,14 @@ showTeamInputBoxes()
     document.getElementById("timeRound").innerHTML = document.getElementById('timePicked').value
  };
  
+ function randomString(length, chars) {
+  var result = '';
+  for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+  return result;
+}
+console.log(randomString(4, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'));
+
+
 
 function createGameSession(){
 sessionPickedName = document.getElementById('setupSessionName').value;
@@ -501,10 +509,10 @@ var d = new Date();
 var sessName = d.getTime().toString()
 sessionPicked = sessName
   
-var teamOneName = "RED TEAM";
-var teamTwoName = "BLUE TEAM";
-var teamThreeName = "ORANGE TEAM";
-var teamFourName = "PURPLE TEAM";
+var teamOneName = "BLUE TEAM";
+var teamTwoName = "ORANGE TEAM";
+var teamThreeName = "PURPLE TEAM";
+var teamFourName = "RED TEAM";
 
 var teamOne = sessName.concat(teamOneName);
 var teamTwo = sessName.concat(teamTwoName);
