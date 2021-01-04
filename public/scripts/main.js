@@ -500,10 +500,10 @@ var d = new Date();
 var sessName = d.getTime().toString()
 sessionPicked = sessName
   
-var teamOneName = "RED TEAM"
-var teamTwoName = "BLUE TEAM")
-var teamThreeName = "ORANGE TEAM"
-var teamFourName = "PURPLE TEAM"
+var teamOneName = "RED TEAM";
+var teamTwoName = "BLUE TEAM";
+var teamThreeName = "ORANGE TEAM";
+var teamFourName = "PURPLE TEAM";
 
 var teamOne = sessName.concat(teamOneName);
 var teamTwo = sessName.concat(teamTwoName);
