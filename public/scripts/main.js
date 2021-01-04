@@ -500,15 +500,15 @@ var d = new Date();
 var sessName = d.getTime().toString()
 sessionPicked = sessName
   
-var teamOne = sessName.concat(document.getElementById('setupTeamOne').value);
-var teamTwo = sessName.concat(document.getElementById('setupTeamTwo').value);
-var teamThree = sessName.concat(document.getElementById('setupTeamThree').value);
-var teamFour = sessName.concat(document.getElementById('setupTeamFour').value);
+var teamOneName = "RED TEAM"
+var teamTwoName = "BLUE TEAM")
+var teamThreeName = "ORANGE TEAM"
+var teamFourName = "PURPLE TEAM"
 
-var teamOneName = document.getElementById('setupTeamOne').value
-var teamTwoName = document.getElementById('setupTeamTwo').value
-var teamThreeName = document.getElementById('setupTeamThree').value
-var teamFourName = document.getElementById('setupTeamFour').value
+var teamOne = sessName.concat(teamOneName);
+var teamTwo = sessName.concat(teamTwoName);
+var teamThree = sessName.concat(teamThreeName);
+var teamFour = sessName.concat(teamFourName);
 
 var timePicked = document.getElementById('timePicked').value
 var orderNumber = 1 
