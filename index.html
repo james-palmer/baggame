@@ -216,7 +216,9 @@ create new game screen
     <div class="row" >
         <a onclick="createBack()" class="btn backButton"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
-    
+    <div class="input-group mb-3" id="sessionID">
+
+    </div>
     <div class="input-group mb-3">
       <input id="setupSessionName" type="text"  maxlength="100" placeholder="Give your session a recognizable name" class="form-control" aria-label="Session Name" aria-describedby="inputGroup-sizing-default">
     </div>
@@ -603,16 +605,16 @@ start screen
 
   <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
     <li class="nav-item">
-      <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link teamNav active">RED TEAM</a>
+      <a href="#teamShowTeamOne" id="teamOne"  data-toggle="tab" role="tab" class="nav-link teamNav active">BLUE TEAM</a>
     </li>
     <li class="nav-item">
-      <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link teamNav">BLUE TEAM</a>
+      <a href="#teamShowTeamTwo" id="teamTwo" data-toggle="tab" role="tab" class="nav-link teamNav">ORANGE TEAM</a>
     </li>
     <li class="nav-item">
-       <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link teamNav">ORANGE TEAM</a>
+       <a style="display:none" href="#teamShowTeamThree" id="teamThree" data-toggle="tab" role="tab" class="nav-link teamNav">PURPLE TEAM</a>
     </li>
     <li class="nav-item">
-      <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link teamNav">PURPLE TEAM</a>
+      <a style="display:none" href="#teamShowTeamFour" id="teamFour" data-toggle="tab" role="tab" class="nav-link teamNav">RED TEAM</a>
     </li>
   </ul>
 -->
@@ -620,8 +622,8 @@ start screen
 
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="teamShowTeamOne" role="tabpanel" aria-labelledby="teamOne">
-    <div style="color: red" class="teams">
-      <h2 id="showTeamOneName">RED TEAM</h2>
+    <div style="color: blue" class="teams">
+      <h2 id="showTeamOneName">BLUE TEAM</h2>
       <i class="fa fa-users teamLogos" aria-hidden="true"></i>
         <ul>
           <li id="t1p1">1</li>
@@ -637,8 +639,8 @@ start screen
      </div> 
   </div>
   <div class="tab-pane fade" id="teamShowTeamTwo" role="tabpanel" aria-labelledby="teamTwo">
-    <div style="color: blue" class="teams">
-      <h2 id="showTeamTwoName">BLUE TEAM</h2>
+    <div style="color: orange" class="teams">
+      <h2 id="showTeamTwoName">ORANGE TEAM</h2>
       <i class="fa fa-users teamLogos" aria-hidden="true"></i>
       <ul>
         <li id="t2p1">asd</li>
@@ -654,8 +656,8 @@ start screen
      </div>    
   </div>
   <div class="tab-pane fade" id="teamShowTeamThree" role="tabpanel" aria-labelledby="teamThree" >
-    <div style="color:orange" class="teams">
-      <h2 id="showTeamThreeName">ORANGE TEAM</h2>
+    <div style="color: purple" class="teams">
+      <h2 id="showTeamThreeName">PURPLE TEAM</h2>
       <i class="fa fa-users teamLogos" aria-hidden="true"></i>
         <ul>
         <li id="t3p1"></li>
@@ -671,8 +673,8 @@ start screen
       </div>    
   </div>
   <div class="tab-pane fade" id="teamShowTeamFour" role="tabpanel" aria-labelledby="teamFour">
-    <div style="color: purple" class="teams">
-      <h2 id="showTeamFourName">PURPLE TEAM</h2>
+    <div style="color: red" class="teams">
+      <h2 id="showTeamFourName">RED TEAM</h2>
       <i class="fa fa-users teamLogos" aria-hidden="true"></i>
         <ul>
         <li id="t4p1"></li>
@@ -1017,9 +1019,9 @@ END GAME BUTTONS AND CONFIRMS
 </body>
 
 <script src="public/scripts/main.js"></script>
-<!--
-<script src="public/sw.js"></script>
--->
+
+<script src="sw.js"></script>
+
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
 
 </html>

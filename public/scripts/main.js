@@ -384,6 +384,11 @@ function createScreen() {
   document.getElementById("page-splash").style.display = "none";
   document.getElementById("wordCloud").style.display = "none";
   document.getElementById("header").style.display = "block";
+
+  sessionID = randomString(4, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  console.log(sessionID)
+
+
 window.navigator.vibrate(200);
 };
 
@@ -497,7 +502,6 @@ showTeamInputBoxes()
   for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
   return result;
 }
-console.log(randomString(4, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'));
 
 
 
