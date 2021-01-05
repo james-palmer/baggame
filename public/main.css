@@ -515,6 +515,18 @@ h6{
 
 /******************************/
 
+#createSessionID {
+  color: auto;
+  font-size: 2rem;
+  padding: 20px;
+  }
+
+  #createInsertSessionID {
+    background-color: teal;
+    color: white;
+    margin-left: 20px;
+    Padding: 40px;
+  }
 
  #homeGoInProgressIcon  {
   padding: 0px;

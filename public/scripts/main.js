@@ -383,6 +383,13 @@ function createScreen() {
   document.getElementById("page-splash").style.display = "none";
   document.getElementById("wordCloud").style.display = "none";
   document.getElementById("header").style.display = "block";
+<<<<<<< Updated upstream
+=======
+
+  sessionID = randomString(4, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  console.log(sessionID)
+  
+>>>>>>> Stashed changes
 window.navigator.vibrate(200);
 };
 
@@ -495,15 +502,26 @@ showTeamInputBoxes()
 function createGameSession(){
 sessionPickedName = document.getElementById('setupSessionName').value;
 
-//create an identifier using millisecond time count function
+//create a session identifier using millisecond time count function
 var d = new Date();
-var sessName = d.getTime().toString()
+//var sessName = d.getTime().toString()
+
+var sessName = sessionID
 sessionPicked = sessName
+<<<<<<< Updated upstream
   
 var teamOneName = "RED TEAM";
 var teamTwoName = "BLUE TEAM";
 var teamThreeName = "ORANGE TEAM";
 var teamFourName = "PURPLE TEAM";
+=======
+document.getElementById("createInsertSessionID").innerHTML =  sessName   
+
+var teamOneName = "BLUE TEAM";
+var teamTwoName = "ORANGE TEAM";
+var teamThreeName = "PURPLE TEAM";
+var teamFourName = "RED TEAM";
+>>>>>>> Stashed changes
 
 var teamOne = sessName.concat(teamOneName);
 var teamTwo = sessName.concat(teamTwoName);
@@ -864,8 +882,10 @@ function createBack() {
 
 function sessionPick() {
   
-  sessionPickedName = document.getElementById('selectSession').value;
-  
+  sessionPicked = document.getElementById('joinSessionID').value;
+  getPlayers();
+
+  /*
     db.collection("sessions").where("name","==",sessionPickedName).get().then(function(querySnapshot) {
      querySnapshot.forEach(function(doc) {
     sessionPicked = doc.id; 
@@ -873,6 +893,7 @@ function sessionPick() {
   }).then(function (activePlayers) { 
       getPlayers();
     });
+*/
  }
 
 function playerPick() {
