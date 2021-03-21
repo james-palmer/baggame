@@ -1,4 +1,4 @@
-/*if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
         navigator.serviceWorker.register('public/sw.js').then(function (registration) {
             console.log('Service worker successfully registered on scope', registration.scope);
@@ -33,6 +33,3 @@ self.addEventListener('fetch', event => {
     })
   );
 });
-
-
-*/
