@@ -26,11 +26,16 @@
   <meta name="msapplication-navbutton-color" content="#303F9F">
 
   <!-- manifest and icons -->
+<link rel="stylesheet" href="public/main.css">
 <link rel="manifest" href="public/manifest.json">
 <meta name="theme-color" content="#009688">
 <link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
-<link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
-  
+
+<script src="public/main.js"></script>
+<script src="public/sw.js"></script>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
+
 <!-- Bootstrap-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -70,25 +75,15 @@ if (location.protocol != 'https:')
 
 <!-- Lottie animation library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js" crossorigin="anonymous"></script>
-
-<link rel="stylesheet" href="public/main.css">
   
-<!-- AdSense-->
-<script data-ad-client="ca-pub-9763905720747539" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-
-
 </head>
   
 <body>
 
 <!--preload sounds-->
   <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
-  
   <audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
-  
   <audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
-  
   <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio> 
   
 <!--*****************************    
@@ -1016,11 +1011,4 @@ END GAME BUTTONS AND CONFIRMS
 </main>
 
 </body>
-
-<script src="public/scripts/main.js"></script>
-<!--
-<script src="public/sw.js"></script>
--->
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
-
 </html>

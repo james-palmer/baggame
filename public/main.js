@@ -146,7 +146,7 @@ var t4p1;var t4p2;var t4p3;var t4p4;var t4p5;var t4p6;var t4p7;var t4p8;var t4p9
   
 
 ////////////////////////////////////////////////////////////////////
-/* Cleanups the UI and removes all Firebase listeners.*/
+/* Cleans up the UI and removes all Firebase listeners.*/
 
 function cleanupUi() {
   // Stop all currently listening Firebase listeners.
@@ -157,9 +157,7 @@ function cleanupUi() {
 }
 
 /**
- * The ID of the currently signed-in User. We keep track of this to detect Auth state change events that are just
- * programmatic token refresh but not a User status change.
- */
+ * The ID of the currently signed-in User to detect Auth state change events*/
 var currentUID;
 
 /**
@@ -173,8 +171,7 @@ function onAuthStateChanged(user) {
   currentUID = user ? user.uid : null;
 
   /*
-  
-  cleanupUi();
+    cleanupUi();
   if (user) {
     splashPage.style.display = 'none';
     writeUserData(user.uid, user.displayName, user.email, user.photoURL);
