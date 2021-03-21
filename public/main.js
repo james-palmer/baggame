@@ -398,7 +398,7 @@ document.getElementById("page-splash").style.display = "none";
 document.getElementById("wordCloud").style.display = "none";
 document.getElementById("joinScreen").style.display = "block";
 document.getElementById("header").style.display = "block";  
-getActiveSessions();
+
 };
 
 function adjustNameCount(){
@@ -479,19 +479,15 @@ document.getElementById('addPlayerName').addEventListener("keyup", function(even
     event.preventDefault();
     document.getElementById("addPlayer").click();
   }
+  
 });
 
 
   $('#clearPlayersEntered').on('click', function(e){
-    
     playerNames=[]
     document.getElementById("addPlayerName").value = ""  
     document.getElementById("playersEntered").innerHTML = playerNames   
   });
-
-document.getElementById("createSelectTeamNumber").onchange = function() {
-showTeamInputBoxes()
-}
 
  document.getElementById("timePicked").onchange = function() {
     document.getElementById("timeRound").innerHTML = document.getElementById('timePicked').value
@@ -510,7 +506,7 @@ sessionPickedName = document.getElementById('setupSessionName').value;
 
 //create an identifier using millisecond time count function
 var d = new Date();
-var sessName = d.getTime().toString()
+var sessName = sessionID
 sessionPicked = sessName
   
 var teamOneName = "BLUE TEAM";
@@ -836,24 +832,6 @@ function createPlayerOptions (){
         } 
     }; 
 
-
-function showTeamInputBoxes(){
- 
-var teamString = document.getElementById("createSelectTeamNumber").value;
-teamCount = teamString.charAt(0)  
-  
-  if (teamCount == 2) {
-   document.getElementById("setupTeamThree").style.display = "none" 
-   document.getElementById("setupTeamFour").style.display = "none" 
-   } else if (teamCount == 3) {
-   document.getElementById("setupTeamThree").style.display = "block" 
-   document.getElementById("setupTeamFour").style.display = "none" 
-   } else if (teamCount == 4) {
-   document.getElementById("setupTeamThree").style.display = "block" 
-   document.getElementById("setupTeamFour").style.display = "block"
-    } 
-}
-
 function showCreateJoinButton(){
   document.getElementById("createJoinButton").style.display = "block";
   }
@@ -879,7 +857,8 @@ function createBack() {
 
 function sessionPick() {
   
-  sessionPickedName = document.getElementById('selectSession').value;
+  sessionPicked = document.getElementById('joinSessionID').value;
+  getPlayers();
   
     db.collection("sessions").where("name","==",sessionPickedName).get().then(function(querySnapshot) {
      querySnapshot.forEach(function(doc) {
@@ -1143,7 +1122,7 @@ var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false
   });
 }
 
-//When user Joins game - populate session and player functions
+/*When user Joins game - populate session and player functions
 function getActiveSessions () {
   
   activeSessions = [];
@@ -1161,6 +1140,7 @@ function getActiveSessions () {
       document.getElementById("selectSession").style.display = "block";
     });
 };
+*/
 
 function sessionOptions (activeSessions){
     console.log("Active sessions: "+ activeSessions);

@@ -375,7 +375,6 @@ h6{
   margin: 10px;
   display: block;
   text-align: left;
-  vertical-align: middle;
   background-color: teal;
   border: solid 2px #b2dfdb;
   font-size: 1.3em;
@@ -515,6 +514,18 @@ h6{
 
 /******************************/
 
+#createSessionID {
+  color: auto;
+  font-size: 2rem;
+  padding: 20px;
+  }
+
+#createInsertSessionID {
+    background-color: teal;
+    color: white;
+    margin-left: 20px;
+    Padding: 40px;
+  }
 
  #homeGoInProgressIcon  {
   padding: 0px;
@@ -777,9 +788,6 @@ padding: 10px;
   left: 20%;
   z-index: 55000;
 
-  p {
-    font-size: 45px;
-  }
 }
 
 .more-ot-alert .close-ot-alert {
