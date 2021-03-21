@@ -383,13 +383,10 @@ function createScreen() {
   document.getElementById("page-splash").style.display = "none";
   document.getElementById("wordCloud").style.display = "none";
   document.getElementById("header").style.display = "block";
-<<<<<<< Updated upstream
-=======
 
   sessionID = randomString(4, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ');
   console.log(sessionID)
   
->>>>>>> Stashed changes
 window.navigator.vibrate(200);
 };
 
@@ -508,20 +505,17 @@ var d = new Date();
 
 var sessName = sessionID
 sessionPicked = sessName
-<<<<<<< Updated upstream
   
 var teamOneName = "RED TEAM";
 var teamTwoName = "BLUE TEAM";
 var teamThreeName = "ORANGE TEAM";
 var teamFourName = "PURPLE TEAM";
-=======
 document.getElementById("createInsertSessionID").innerHTML =  sessName   
 
 var teamOneName = "BLUE TEAM";
 var teamTwoName = "ORANGE TEAM";
 var teamThreeName = "PURPLE TEAM";
 var teamFourName = "RED TEAM";
->>>>>>> Stashed changes
 
 var teamOne = sessName.concat(teamOneName);
 var teamTwo = sessName.concat(teamTwoName);
@@ -1200,9 +1194,16 @@ function getPlayers () {
     activePlayers.push(doc.id); 
      });
       return activePlayers;
+
   }).then(function (activePlayers) {
-      playerOptions(activePlayers);
+          
+      console.log(activePlayers.length);
+      if (activePlayers.length > 0) {
+        alert("Session Code Not Found")
+      } else {
+            playerOptions(activePlayers);
       document.getElementById("selectPlayer").style.display = "block";
+      }
     });
 };
 
