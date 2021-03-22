@@ -223,15 +223,13 @@ window.addEventListener('load', function() {
 // Bind home screen buttons.
   $('#homeStartButton').on('click', function(e){
     getStartInfo();
-
   });
   
   $('#homeProgressButton').on('click', function(e){
     getStartInfo();
   });
     
-
-document.getElementById('join-button').onclick = function()  {joinScreen();};   
+  document.getElementById('join-button').onclick = function()  {joinScreen();};   
   
   //********************************************
   //  Switch on/off the dynamic words in splash background
@@ -849,15 +847,6 @@ function sessionPick() {
   sessionPicked = document.getElementById('joinSessionID').value.toUpperCase();
   
   getPlayers();
-  
-    db.collection("sessions").where("name","==",sessionPickedName).get().then(function(querySnapshot) {
-     querySnapshot.forEach(function(doc) {
-    sessionPicked = doc.id; 
-285     });
-  }).then(function (activePlayers) { 
-      getPlayers();
-      console.log(sessionPicked)
-    });
  }
 
 function playerPick() {
@@ -1116,8 +1105,17 @@ function getPlayers () {
      });
       return activePlayers;
   }).then(function (activePlayers) {
-      playerOptions(activePlayers);
+     console.log(activePlayers)
+      
+      if (activePlayers.length == 0){
+        document.getElementById('sessionNotRecognised').style.display =  'block';   
+        
+    } else {
       document.getElementById("selectPlayer").style.display = "block";
+      document.getElementById('sessionNotRecognised').style.display =  'none';  
+      playerOptions(activePlayers); 
+    }
+
     });
 };
 
@@ -1424,34 +1422,7 @@ document.getElementById("enterScreen").style.display = "none"
 checkForPlayersEnteredNames ();
 };          
 
-
-//FORBES 400 API for name inspiration
-/*
-var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var json = JSON.parse(this.response);
-      
-// Map json labels  back to values array
-var labels = json.map(function (e) {
-    return e.name;
-});
-     console.log(labels)  
-// Map json values back to values array
-var values = json.map(function (e) {
-    return (e.realTimeWorth / 1000); // Divide to billions in units of ten
-});
-}
- 
-  };
-  xhttp.open("GET", "https://forbes400.herokuapp.com/api/forbes400?limit=50", false);
-  xhttp.send();
-*/
-
-
-
 // WikiData top people based on number of Wiki articles referencing them
-
 function getRandomWikiName(){
 
   document.getElementById('wikiWait').style.display= 'block';
@@ -1560,7 +1531,6 @@ function hideAllWiki(){
   document.getElementById("randomWikiNameButton10").style.display = "none";
   countNamesEntered();
   }
-
 
 var namesInputSoFar
 

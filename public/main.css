@@ -187,7 +187,7 @@ h6{
   position: fixed;
   top: 10px;
   left: -35px;
-  z: 100;
+  z-index: 100;
 }
 
 /* Style the bottom navigation buttons */
@@ -285,84 +285,34 @@ h6{
     animation-delay: 0.5s;
 }
 @keyframes loading-one {
-    0% {
-        height: 0;
-        opacity: 1;
-    }
-    12.5% {
-        height: 100%;
-        opacity: 1;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        height: 100%;
-        opacity: 0;
-    }
+  0% {height: 0;opacity: 1;}
+  12.5% {height: 100%;opacity: 1;}
+  50% {opacity: 1;}
+  100% {height: 100%;opacity: 0;}
 }
 @keyframes loading-two {
-    0% {
-        width: 0;
-        opacity: 1;
-    }
-    12.5% {
-        width: 100%;
-        opacity: 1;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        width: 100%;
-        opacity: 0;
-    }
+  0% { width: 0; opacity: 1;}
+  12.5% {width: 100%; opacity: 1;}
+  50% {opacity: 1;}
+  100% {width: 100%;opacity: 0;}
 }
 @keyframes rotate-loader {
-    0% {
-        transform: rotate(-45deg);
-    }
-    20% {
-        transform: rotate(-45deg);
-    }
-    25% {
-        transform: rotate(-135deg);
-    }
-    45% {
-        transform: rotate(-135deg);
-    }
-    50% {
-        transform: rotate(-225deg);
-    }
-    70% {
-        transform: rotate(-225deg);
-    }
-    75% {
-        transform: rotate(-315deg);
-    }
-    95% {
-        transform: rotate(-315deg);
-    }
-    100% {
-        transform: rotate(-405deg);
-    }
+  0% {transform: rotate(-45deg);}
+  20% {transform: rotate(-45deg);}
+  25% {transform: rotate(-135deg);    }
+  45% {transform: rotate(-135deg);}
+  50% {transform: rotate(-225deg);}
+  70% {transform: rotate(-225deg);}
+  75% {transform: rotate(-315deg);}
+  95% {transform: rotate(-315deg);}
+  100% {transform: rotate(-405deg);}
 }
 
 @keyframes animateLogo {
-  0% {
-    left: -10%;
-		transform: rotate(30deg)
-  }
-  50% {
-    left: 50%;
-		transform: rotate(-30deg)
-  }
-  100% {
-    left: -10%;
-		transform: rotate(30deg)
-  }
+0% {left: -10%;transform: rotate(30deg)}
+50% {left: 50%;transform: rotate(-30deg)}
+100% {left: -10%;transform: rotate(30deg)}
 }
-
 
 /***************/
 
@@ -407,15 +357,14 @@ h6{
 .teamNav {
   width: 25%;
   
-  }
+}
   
-  .teamLogos {
-  font-size: 10em;
+.teamLogos {
+  font-size: 6em;
   
   
-  }
+}
   
-
 .homeButtons button {
  
   padding: 20px;
@@ -651,6 +600,7 @@ padding: 10px;
 .submit{
   width: 100%;
   background-color: teal;
+  color: white;
   border-top: 3px solid #b2dfdb;
   padding: 10px 2px;
   position: fixed;
