@@ -1,5 +1,5 @@
 <!doctype html>
-<!--Copyright James Palmer 2019 -->
+<!--Copyright James Palmer 2021 -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -144,7 +144,7 @@ Welcome splash screen
         <a id="menu-start"  style="display: block" class=""><i class="fa fa-play"></i></a>
         <a id="menu-teams"  style="display: block" class=""><i class="fa fa-users"></i></a>
         <a id="menu-scores" style="display: block" class=""><i class="fa fa-trophy"></i></a>
-        <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>
+       <!--//HIDE ROUND SCREEN  <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>-->
         <a id="menu-refresh"  style="display: block" class=""><i id="refreshIcon" class="fa fa-refresh"></i></a>
         <a id="menu-exit"  style="display: block" class=""><i id="signOutIcon" class="fas fa-sign-out-alt"></i></a>   
    </div>
@@ -168,7 +168,9 @@ Welcome splash screen
   
   <div class="dropdown" style="position:fixed; top:0px;right:0px; color:white;">
         <button type="button" id="loginName" class="btn dropdown-toggle" style="color:white;" data-toggle="dropdown">Options</button>
-        <p id="loginTeamName"></p>
+        <!--<span id="loginTeamName"></span>-->
+        <br>
+        <span style="position:fixed; right: 5px;" id="loginSessionName"></span>
     <div class="dropdown-menu">
       <button class="dropdown-item" data-toggle="modal" data-target="#howTo">Rules</button>
       <button class="dropdown-item" id="LogOut" onclick="bmLogOut();">Log Out</button>
@@ -202,7 +204,7 @@ Welcome splash screen
 </section>  
   
   
-<div id="confetti"  style="display: none; width:100vw; height: 90vh; position: fixed; top: 0; left:0;"></div>
+<div id="confetti"  style="z-index: 10000000; display: none; width:100vw; height: 90vh; position: fixed; top: 0; left:0;"></div>
   
   
 <div id="fireworks" style="display: none; width:100vw; height: 40vh; position: fixed; bottom: 10vh; left:0;"> </div>
@@ -220,10 +222,7 @@ create new game screen
     <div class="input-group mb-3" id="sessionID">
 
     </div>
-    <div class="input-group mb-3">
-      <input id="setupSessionName" type="text"  maxlength="100" placeholder="Give your session a recognizable name" class="form-control" aria-label="Session Name" aria-describedby="inputGroup-sizing-default">
-    </div>
-    
+   
     <div id="enterPlayerChips" class="chips chips-placeholder">
       <div class="input-group mb-3">
           <input type="text" class="form-control" id="addPlayerName" placeholder="Enter player names" aria-label="Player name" aria-describedby="button-addon2">
@@ -289,12 +288,11 @@ Game create successfully screen
   <h5>Game successfully created!</h5>
   <br><hr>
   <br>
-  <h5>Share the below code with your fellow mingers:</h5>
+  <h5>Tell your fellow players to go to bagminge.online and join a game using this code:</h5>
   <br>
-  <a id="createSessionID">CODE = <span id="createInsertSessionID"></span></a>
+  <p class="codeSessionID">CODE = <span id="createSessionID" class="showSessionID">TEST</span></p>
   <hr>
   
-
     <div class="input-group mb-3" id="createPlayer">
       <select class="custom-select" id="createSelectPlayer" onchange="showCreateJoinButton()">
         <option value="" selected disabled>Please select a player</option>
@@ -320,8 +318,10 @@ Join game screen
      <h4>
        Welcome to Bag Minge!</h4>
       <p>
-        If you have an active game setup, enter your Session Code below.
+        If you have an active game setup, enter your Session Code below to join.
      </p>
+     <p>
+      Otherwise go back to setup a new game.</p>
 
      <div class="input-group mb-3">
       <input type="text" class="form-control" id="joinSessionID" placeholder="Enter code" aria-label="Session code" aria-describedby="button-addon2">
@@ -350,11 +350,14 @@ Join game screen
 Waiting Screen - while players enter names
 **************************-->  
   <section id="waitScreen" style="display:none">
-    <div style="align-items: center;" class="container" style="align:center; padding-top:50px">
-      <div class="row" style="align:center; padding-bottom:50px">
-        <h5>Waiting for remaining players to enter names into the bag</h5>  
+    <div class="container" style="margin-top:50px">
+      <div class="row" style="margin: 0px 0.5rem;">
+        <p>Waiting for remaining players to enter names into the bag.</p>  
+        <p>Direct the other players to <span style="font-weight: bold; color: teal;">bagminge.online</span> and join a game using the code below:</p>
       </div>
-
+      <div class="row" style="margin-bottom: 1rem;display:flex; justify-content: center;">
+        <p class="waitSessionID">CODE =<span id="waitSessionID" class="showSessionID">TEST</span></p>
+      </div>
       <div class="row">
         <div class="col-md-12">
             <div class="loader">
@@ -374,9 +377,10 @@ Waiting Screen - while players enter names
         </div>
     </div>   
   
-  <div class="row" text-align="center">
+    
+  <div class="row" style="display:flex; justify-content: center;">
       <div class="col-md-12">
-   <br><br><hr>Waiting for: <p id="playersYetToEnter">James, Alice</p>
+   <hr>Waiting for: <p id="playersYetToEnter">James, Alice</p>
   </div>      
       </div>
   </div>   
@@ -387,24 +391,22 @@ Waiting Screen - while players enter names
 <!--*****************************    
 Welcome Screen - basic info at the start
 **************************-->  
-<section id="welcomeScreen" style="display: none">
+<section id="welcomeScreen" style="display:none">
   <div class="container">
     
     <div class="row">
       <h4>
-         Welcome to your <span id="welcomeSession"></span> game of Bag Minge, <span id="welcomePlayer"></span>!
+         Welcome to your game of Bagminge, <span id="welcomePlayer"></span>!
       </h4>
       <br>
       <h5>
        You're on the <span id="welcomeTeam" style="font-weight: bold; color:teal"></span> team, join up with your teammates now!
       </h5>
-    </div>
-   <hr>
-    <div>
+     <hr></div><div class="row">
       <h5>
        <span id="upNextPlayer" style="font-weight: bold; color:teal"></span> from the  <span id="upNextTeam" style="font-weight: bold; color:teal"></span> team is up next!
       </h5> 
-    </div>
+      </div>
     <div class="row">
       <button id="welcomeHomeButton"  onclick="showSection(homeScreen, menuHome);showHomeScreenDetails();enableNavBarButtons();" class="submit btn btn-primary">Let's Go!</button>
     </div>
@@ -739,7 +741,7 @@ start screen
 </section>
   
   <!-- show live round screen 
-**************************-->
+**************************
 <section id="roundScreen" style="display:none">
   <div class="container" >  
      <div class="row">
@@ -774,7 +776,7 @@ start screen
   </div>
 </section>  
 
-  
+  -->
   
   <!-- show information screen screen 
 **************************-->
@@ -859,7 +861,7 @@ start screen
     <div class="container" >   
       <div style="padding: 10px 10px 0px 50px">
         <h5>Player: <span id="enterPlayerPicked"></span></h5>
-        <h5>Session: <span id="enterSessionPicked"></span></h5>
+        <h5>Session: <span id="sessionPicked"></span></h5>
        </div>
       <hr>
        Enter <span id="enterNameCount"></span> names into the minge bag:<br>
@@ -868,27 +870,27 @@ start screen
         <div class="col">
                
          <div class="input-group mb-3">
-            <input id="enterNameOne" onclick="oneSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameOne" onclick="oneSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a style="display:none" id="randomWikiNameButton1" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
          
           <div class="input-group mb-3">
-            <input id="enterNameTwo" onclick="twoSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameTwo" onclick="twoSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton2" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameThree" onclick="threeSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameThree" onclick="threeSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton3" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameFour" onclick="fourSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameFour" onclick="fourSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton4" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
         
          <div class="input-group mb-3">
-            <input id="enterNameFive" onclick="fiveSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameFive" onclick="fiveSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a style="display:none" id="randomWikiNameButton5" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
            
@@ -897,27 +899,27 @@ start screen
       <div class="col">
         
           <div class="input-group mb-3">
-            <input id="enterNameSix" onclick="sixSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameSix" onclick="sixSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton6" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameSeven" onclick="sevenSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameSeven" onclick="sevenSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton7" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameEight" onclick="eightSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameEight" onclick="eightSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton8" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameNine" onclick="nineSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameNine" onclick="nineSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton9" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameTen" onclick="tenSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameTen" onclick="tenSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton10" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       </div>

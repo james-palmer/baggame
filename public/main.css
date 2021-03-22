@@ -514,17 +514,26 @@ h6{
 
 /******************************/
 
-#createSessionID {
+.codeSessionID {
   color: auto;
   font-size: 2rem;
   padding: 20px;
   }
 
-#createInsertSessionID {
+
+.waitSessionID {
+  color: auto;
+  font-size: 1rem;
+  padding: auto;
+  margin-top: 1.5rem;
+  margin-left:1rem;
+  }
+
+.showSessionID {
     background-color: teal;
     color: white;
     margin-left: 20px;
-    Padding: 40px;
+    Padding: 20px;
   }
 
  #homeGoInProgressIcon  {
