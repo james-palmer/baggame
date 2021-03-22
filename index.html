@@ -1,5 +1,5 @@
 <!doctype html>
-<!--Copyright James Palmer 2019 -->
+<!--Copyright James Palmer 2021 -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -72,7 +72,12 @@ if (location.protocol != 'https:')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="public/main.css">
-  
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
+
+
+<!--
+  <script src="sw.js"></script>
+-->
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVXRSEZ93K"></script>
 <script>
@@ -83,23 +88,14 @@ if (location.protocol != 'https:')
   gtag('config', 'G-HVXRSEZ93K');
 </script>
 
-
-<!-- AdSense-->
-<script data-ad-client="ca-pub-9763905720747539" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-
-
 </head>
   
 <body>
 
 <!--preload sounds-->
   <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
-  
   <audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
-  
   <audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
-  
   <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio> 
   
 <!--*****************************    
@@ -109,7 +105,12 @@ Welcome splash screen
  <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
   Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
   Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
- </p>
+  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
+  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
+  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
+  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
+  Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell
+</p>
   </section>
     
   <section id="page-splash" style="display:block">
@@ -143,7 +144,7 @@ Welcome splash screen
         <a id="menu-start"  style="display: block" class=""><i class="fa fa-play"></i></a>
         <a id="menu-teams"  style="display: block" class=""><i class="fa fa-users"></i></a>
         <a id="menu-scores" style="display: block" class=""><i class="fa fa-trophy"></i></a>
-        <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>
+       <!--//HIDE ROUND SCREEN  <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>-->
         <a id="menu-refresh"  style="display: block" class=""><i id="refreshIcon" class="fa fa-refresh"></i></a>
         <a id="menu-exit"  style="display: block" class=""><i id="signOutIcon" class="fas fa-sign-out-alt"></i></a>   
    </div>
@@ -167,7 +168,9 @@ Welcome splash screen
   
   <div class="dropdown" style="position:fixed; top:0px;right:0px; color:white;">
         <button type="button" id="loginName" class="btn dropdown-toggle" style="color:white;" data-toggle="dropdown">Options</button>
-        <p id="loginTeamName"></p>
+        <!--<span id="loginTeamName"></span>-->
+        <br>
+        <span style="position:fixed; right: 5px;" id="loginSessionName"></span>
     <div class="dropdown-menu">
       <button class="dropdown-item" data-toggle="modal" data-target="#howTo">Rules</button>
       <button class="dropdown-item" id="LogOut" onclick="bmLogOut();">Log Out</button>
@@ -201,7 +204,7 @@ Welcome splash screen
 </section>  
   
   
-<div id="confetti"  style="display: none; width:100vw; height: 90vh; position: fixed; top: 0; left:0;"></div>
+<div id="confetti"  style="z-index: 10000000; display: none; width:100vw; height: 90vh; position: fixed; top: 0; left:0;"></div>
   
   
 <div id="fireworks" style="display: none; width:100vw; height: 40vh; position: fixed; bottom: 10vh; left:0;"> </div>
@@ -219,10 +222,7 @@ create new game screen
     <div class="input-group mb-3" id="sessionID">
 
     </div>
-    <div class="input-group mb-3">
-      <input id="setupSessionName" type="text"  maxlength="100" placeholder="Give your session a recognizable name" class="form-control" aria-label="Session Name" aria-describedby="inputGroup-sizing-default">
-    </div>
-    
+   
     <div id="enterPlayerChips" class="chips chips-placeholder">
       <div class="input-group mb-3">
           <input type="text" class="form-control" id="addPlayerName" placeholder="Enter player names" aria-label="Player name" aria-describedby="button-addon2">
@@ -240,7 +240,7 @@ create new game screen
         <option>3</option>
         <option>4</option>
         <option>5</option>
-        <option>6</option>
+        <option>6</option>``
         <option>7</option>
         <option>8</option>
         <option>9</option>
@@ -256,21 +256,7 @@ create new game screen
           <option>4 teams</option>
        </select>
     </div>
-    <!--
-          <div class="input-group mb-1">
-            <input id="setupTeamOne" type="text" maxlength="20" class="form-control" placeholder="Team 1 name">
-          </div>
-          <div  class="input-group mb-1">
-            <input id="setupTeamTwo" type="text" maxlength="20" class="form-control"  placeholder="Team 2 name">
-          </div>
-          <div  class="input-group mb-1">
-            <input id="setupTeamThree" type="text" style="display:none" class="form-control"   maxlength="20" placeholder="Team 3 name">
-          </div>
-          <div  class="input-group mb-1">
-            <input id="setupTeamFour" type="text" style="display:none" class="form-control" maxlength="20" placeholder="Team 4 name">
-          </div>
-    -->
-    
+   
     <div style="padding:30px 0px">
      <form>
       <div class="custom-control custom-switch">
@@ -301,8 +287,12 @@ Game create successfully screen
   <br>
   <h5>Game successfully created!</h5>
   <br><hr>
+  <br>
+  <h5>Tell your fellow players to go to bagminge.online and join a game using this code:</h5>
+  <br>
+  <p class="codeSessionID">CODE = <span id="createSessionID" class="showSessionID">TEST</span></p>
+  <hr>
   
-
     <div class="input-group mb-3" id="createPlayer">
       <select class="custom-select" id="createSelectPlayer" onchange="showCreateJoinButton()">
         <option value="" selected disabled>Please select a player</option>
@@ -328,15 +318,20 @@ Join game screen
      <h4>
        Welcome to Bag Minge!</h4>
       <p>
-        If you have an active game setup, select your session name (ask your bag master if you're not sure) and pick your player.
+        If you have an active game setup, enter your Session Code below to join.
      </p>
+     <p>
+      Otherwise go back to setup a new game.</p>
+
+     <div class="input-group mb-3">
+      <input type="text" class="form-control" id="joinSessionID" placeholder="Enter code" aria-label="Session code" aria-describedby="button-addon2">
+      <br>
+      <div class="input-group-append row">
+        <button class="btn btn-outline-secondary" type="button" id="enterCode" onclick="sessionPick()"><i class="fa fa-plus"></i> Join Game</button>
+      </div> 
+  </div>
    <hr>
       
- <div class="input-group mb-3" id="session">
-  <select class="custom-select" id="selectSession" style="display:none" onchange="sessionPick()">
-    <option value="" selected disabled>Please select a session</option>
-  </select>
-</div>
       
   <div class="input-group mb-3" id="player">
   <select class="custom-select" id="selectPlayer" style="display:none" onchange="playerPick()">
@@ -351,17 +346,18 @@ Join game screen
     </div>
   </section>
   
-  
-  
 <!--*****************************    
 Waiting Screen - while players enter names
 **************************-->  
   <section id="waitScreen" style="display:none">
-    <div align="center" class="container" style="align:center; padding-top:50px">
-      <div class="row" style="align:center; padding-bottom:50px">
-        <h5>Waiting for remaining players to enter names into the bag</h5>  
+    <div class="container" style="margin-top:50px">
+      <div class="row" style="margin: 0px 0.5rem;">
+        <p>Waiting for remaining players to enter names into the bag.</p>  
+        <p>Direct the other players to <span style="font-weight: bold; color: teal;">bagminge.online</span> and join a game using the code below:</p>
       </div>
-
+      <div class="row" style="margin-bottom: 1rem;display:flex; justify-content: center;">
+        <p class="waitSessionID">CODE =<span id="waitSessionID" class="showSessionID">TEST</span></p>
+      </div>
       <div class="row">
         <div class="col-md-12">
             <div class="loader">
@@ -381,9 +377,10 @@ Waiting Screen - while players enter names
         </div>
     </div>   
   
-  <div class="row" text-align="center">
+    
+  <div class="row" style="display:flex; justify-content: center;">
       <div class="col-md-12">
-   <br><br><hr>Waiting for: <p id="playersYetToEnter">James, Alice</p>
+   <hr>Waiting for: <p id="playersYetToEnter">James, Alice</p>
   </div>      
       </div>
   </div>   
@@ -394,24 +391,22 @@ Waiting Screen - while players enter names
 <!--*****************************    
 Welcome Screen - basic info at the start
 **************************-->  
-<section id="welcomeScreen" style="display: none">
+<section id="welcomeScreen" style="display:none">
   <div class="container">
     
     <div class="row">
       <h4>
-         Welcome to your <span id="welcomeSession"></span> game of Bag Minge, <span id="welcomePlayer"></span>!
+         Welcome to your game of Bagminge, <span id="welcomePlayer"></span>!
       </h4>
       <br>
       <h5>
        You're on the <span id="welcomeTeam" style="font-weight: bold; color:teal"></span> team, join up with your teammates now!
       </h5>
-    </div>
-   <hr>
-    <div>
+     <hr></div><div class="row">
       <h5>
        <span id="upNextPlayer" style="font-weight: bold; color:teal"></span> from the  <span id="upNextTeam" style="font-weight: bold; color:teal"></span> team is up next!
       </h5> 
-    </div>
+      </div>
     <div class="row">
       <button id="welcomeHomeButton"  onclick="showSection(homeScreen, menuHome);showHomeScreenDetails();enableNavBarButtons();" class="submit btn btn-primary">Let's Go!</button>
     </div>
@@ -746,7 +741,7 @@ start screen
 </section>
   
   <!-- show live round screen 
-**************************-->
+**************************
 <section id="roundScreen" style="display:none">
   <div class="container" >  
      <div class="row">
@@ -781,7 +776,7 @@ start screen
   </div>
 </section>  
 
-  
+  -->
   
   <!-- show information screen screen 
 **************************-->
@@ -866,7 +861,7 @@ start screen
     <div class="container" >   
       <div style="padding: 10px 10px 0px 50px">
         <h5>Player: <span id="enterPlayerPicked"></span></h5>
-        <h5>Session: <span id="enterSessionPicked"></span></h5>
+        <h5>Session: <span id="sessionPicked"></span></h5>
        </div>
       <hr>
        Enter <span id="enterNameCount"></span> names into the minge bag:<br>
@@ -875,27 +870,27 @@ start screen
         <div class="col">
                
          <div class="input-group mb-3">
-            <input id="enterNameOne" onclick="oneSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameOne" onclick="oneSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a style="display:none" id="randomWikiNameButton1" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
          
           <div class="input-group mb-3">
-            <input id="enterNameTwo" onclick="twoSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameTwo" onclick="twoSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton2" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameThree" onclick="threeSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameThree" onclick="threeSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton3" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameFour" onclick="fourSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameFour" onclick="fourSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton4" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
         
          <div class="input-group mb-3">
-            <input id="enterNameFive" onclick="fiveSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameFive" onclick="fiveSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a style="display:none" id="randomWikiNameButton5" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
            
@@ -904,27 +899,27 @@ start screen
       <div class="col">
         
           <div class="input-group mb-3">
-            <input id="enterNameSix" onclick="sixSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameSix" onclick="sixSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton6" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameSeven" onclick="sevenSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameSeven" onclick="sevenSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton7" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameEight" onclick="eightSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameEight" onclick="eightSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton8" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameNine" onclick="nineSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameNine" onclick="nineSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton9" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       
          <div class="input-group mb-3">
-            <input id="enterNameTen" onclick="tenSelect()" type="text" class="form-control" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
+            <input id="enterNameTen" onclick="tenSelect()" type="text" class="form-control enter-names" aria-label="Name Input" aria-describedby="inputGroup-sizing-sm">
             <a  style="display:none" id="randomWikiNameButton10" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-toggle="modal" data-target="#wikiNameModal"><i class="far fa-lightbulb"></i></a>
           </div>
       </div>
@@ -1009,19 +1004,8 @@ END GAME BUTTONS AND CONFIRMS
     </div>
   </div>   
 </div>
-
 <!--**********************************-->
- 
-
-
 </main>
-
 </body>
-
-<script src="public/scripts/main.js"></script>
-
-<script src="sw.js"></script>
-
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
-
+<script src="public/main.js"></script>
 </html>

@@ -5,7 +5,7 @@ var menuHome = document.getElementById('menu-goHome');
 var menuStart = document.getElementById('menu-start');
 var menuTeams = document.getElementById('menu-teams');
 var menuScores = document.getElementById('menu-scores');
-var menuRound = document.getElementById('menu-round');
+ //HIDE ROUND SCREEN  var menuRound = document.getElementById('menu-round');
 var menuRefresh = document.getElementById('menu-refresh');
 var menuExit = document.getElementById('menu-exit');
 
@@ -13,7 +13,7 @@ var menuExit = document.getElementById('menu-exit');
 var homeScreen = document.getElementById('homeScreen');
 var startScreen = document.getElementById('startScreen');
 var scoresScreen = document.getElementById('scoresScreen');
-var roundScreen = document.getElementById('roundScreen');
+ //HIDE ROUND SCREEN  var roundScreen = document.getElementById('roundScreen');
 var teamsScreen = document.getElementById('teamsScreen');
 var infoScreen = document.getElementById('infoScreen');
 
@@ -216,19 +216,18 @@ window.addEventListener('load', function() {
   menuStart.onclick = function() {getStartInfo(); hideAlert();};
   menuTeams.onclick = function() {showTeamScreen();};
   menuScores.onclick = function() {showScoresScreen();};
-  menuRound.onclick = function() {showRoundScreen();};
+   //HIDE ROUND SCREEN  menuRound.onclick = function() {showRoundScreen();};
   menuRefresh.onclick = function() {updateHomeScreenDetails();};
   menuExit.onclick = function() {bmLogOut()};
   
 // Bind home screen buttons.
   $('#homeStartButton').on('click', function(e){
     getStartInfo();
-    hideAlert()
+
   });
   
   $('#homeProgressButton').on('click', function(e){
     getStartInfo();
-    hideAlert()
   });
     
 
@@ -249,7 +248,7 @@ function showSection(sectionElement, buttonElement) {
   startScreen.style.display = 'none';
   teamsScreen.style.display = "none";
   scoresScreen.style.display = 'none';
-  roundScreen.style.display = "none";
+  //HIDE ROUND SCREEN  roundScreen.style.display = "none";
   document.getElementById("gameOverScreen").style.display = "none";
   document.getElementById('scoreboard').style.display =  'none';  
   document.getElementById("roundEnd-splash").style.display = "none" ;
@@ -259,7 +258,7 @@ function showSection(sectionElement, buttonElement) {
   menuStart.classList.remove('is-active');
   menuTeams.classList.remove('is-active');
   menuScores.classList.remove('is-active');
-  menuRound.classList.remove('is-active');
+   //HIDE ROUND SCREEN  menuRound.classList.remove('is-active');
     
   if (sectionElement) {sectionElement.style.display = 'block';}
   if (buttonElement) {buttonElement.classList.add('is-active');}
@@ -355,7 +354,7 @@ function bmLogOut(){
   startScreen.style.display = 'none';
   teamsScreen.style.display = "none";
   scoresScreen.style.display = 'none';
-  roundScreen.style.display = "none";
+   //HIDE ROUND SCREEN  roundScreen.style.display = "none";
   
   fireworks.style.display="none"
   confetti.style.display="none"
@@ -385,7 +384,7 @@ function createScreen() {
   document.getElementById("wordCloud").style.display = "none";
   document.getElementById("header").style.display = "block";
 
-  sessionID = randomString(4, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  sessionID = randomString(4, '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ');
   console.log(sessionID)
 
 
@@ -398,7 +397,7 @@ document.getElementById("page-splash").style.display = "none";
 document.getElementById("wordCloud").style.display = "none";
 document.getElementById("joinScreen").style.display = "block";
 document.getElementById("header").style.display = "block";  
-getActiveSessions();
+
 };
 
 function adjustNameCount(){
@@ -448,24 +447,9 @@ function adjustNameCount(){
   
 }
 
-
 //********************************************
 // Create screen functions
 //********************************************
-
-function getFriendlyTeams() {
-  
-  fetch("https://friendly-words.glitch.me/team-pairs")  
-  .then(function(resp) { return resp.json() }) // Convert data to json
-  .then(function(data) {
-    console.log(data[0]);
-
-  })
-  .catch(function() {
-    // catch any errors
-  });
-}
-
 
   $('#addPlayer').on('click', function(e){
     var playerAdd = document.getElementById('addPlayerName').value
@@ -474,107 +458,99 @@ function getFriendlyTeams() {
     document.getElementById("addPlayerName").value = ""  
   });
 
-document.getElementById('addPlayerName').addEventListener("keyup", function(event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    document.getElementById("addPlayer").click();
-  }
-});
-
+  document.getElementById('addPlayerName').addEventListener("keyup", function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      document.getElementById("addPlayer").click();
+    }
+  });
 
   $('#clearPlayersEntered').on('click', function(e){
-    
     playerNames=[]
     document.getElementById("addPlayerName").value = ""  
     document.getElementById("playersEntered").innerHTML = playerNames   
   });
 
-document.getElementById("createSelectTeamNumber").onchange = function() {
-showTeamInputBoxes()
-}
-
  document.getElementById("timePicked").onchange = function() {
     document.getElementById("timeRound").innerHTML = document.getElementById('timePicked').value
  };
  
- function randomString(length, chars) {
-  var result = '';
-  for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
-  return result;
-}
+  function randomString(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+    return result;
+  }
 
+  function createGameSession(){
+    sessionPickedName = sessionID
+    //create an identifier using millisecond time count function
+    var d = new Date();
+    var sessName = sessionID
+    sessionPicked = sessName
+    document.getElementById("createSessionID").innerHTML = sessionID
+    document.getElementById("waitSessionID").innerHTML = sessionID
+    var teamOneName = "BLUE TEAM";
+    var teamTwoName = "ORANGE TEAM";
+    var teamThreeName = "PURPLE TEAM";
+    var teamFourName = "RED TEAM";
 
+    var teamOne = sessName.concat(teamOneName);
+    var teamTwo = sessName.concat(teamTwoName);
+    var teamThree = sessName.concat(teamThreeName);
+    var teamFour = sessName.concat(teamFourName);
 
-function createGameSession(){
-sessionPickedName = document.getElementById('setupSessionName').value;
+    var timePicked = document.getElementById('timePicked').value
+    var orderNumber = 1 
+    var t1number = 1
+    var t2number = 1
+    var t3number = 1
+    var t4number = 1
+    var countNumberPlayers = playerNames.length;
+    var currentPlayerNumber;
+    namesPerPlayer = document.getElementById("createNameCount").value;
+    var totalNameCount = namesPerPlayer*countNumberPlayers;
+    jokerGame = document.getElementById("createJoker").checked;
+    activePlayers = playerNames
 
-//create an identifier using millisecond time count function
-var d = new Date();
-var sessName = d.getTime().toString()
-sessionPicked = sessName
+    shuffle(playerNames);
+    var teamsSelected = document.getElementById("createSelectTeamNumber").value  
+    teamCount = parseInt(teamsSelected,10)
   
-var teamOneName = "BLUE TEAM";
-var teamTwoName = "ORANGE TEAM";
-var teamThreeName = "PURPLE TEAM";
-var teamFourName = "RED TEAM";
-
-var teamOne = sessName.concat(teamOneName);
-var teamTwo = sessName.concat(teamTwoName);
-var teamThree = sessName.concat(teamThreeName);
-var teamFour = sessName.concat(teamFourName);
-
-var timePicked = document.getElementById('timePicked').value
-var orderNumber = 1 
-var t1number = 1
-var t2number = 1
-var t3number = 1
-var t4number = 1
-var countNumberPlayers = playerNames.length;
-var currentPlayerNumber;
-namesPerPlayer = document.getElementById("createNameCount").value;
-var totalNameCount = namesPerPlayer*countNumberPlayers;
-jokerGame = document.getElementById("createJoker").checked;
-activePlayers = playerNames
-
-shuffle(playerNames);
-var teamsSelected = document.getElementById("createSelectTeamNumber").value  
-teamCount = parseInt(teamsSelected,10)
-  
-// decide which player starts
-      if (playerNames.length % teamCount == 0){
-      currentPlayer = playerNames[0]
-      currentTeam = teamOne
-      currentTeamName = teamOneName
-      currentPlayerNumber = 1
-      } else if (playerNames.length % teamCount == 1){
-      currentPlayer = playerNames[1]
-      currentTeam = teamTwo
-      currentTeamName = teamTwoName
-      currentPlayerNumber = 2
-      } else if (playerNames.length % teamCount == 2){
-      currentPlayer = playerNames[2]
-      currentTeam = teamThree
-      currentTeamName = teamThreeName
-      currentPlayerNumber = 3
-      } else if (playerNames.length % teamCount == 3){
-      currentPlayer = playerNames[3]
-      currentTeam = teamFour
-      currentTeamName = teamFourName
-      currentPlayerNumber = 4
-      }
+    // decide which player starts
+    if (playerNames.length % teamCount == 0){
+    currentPlayer = playerNames[0]
+    currentTeam = teamOne
+    currentTeamName = teamOneName
+    currentPlayerNumber = 1
+    } else if (playerNames.length % teamCount == 1){
+    currentPlayer = playerNames[1]
+    currentTeam = teamTwo
+    currentTeamName = teamTwoName
+    currentPlayerNumber = 2
+    } else if (playerNames.length % teamCount == 2){
+    currentPlayer = playerNames[2]
+    currentTeam = teamThree
+    currentTeamName = teamThreeName
+    currentPlayerNumber = 3
+    } else if (playerNames.length % teamCount == 3){
+    currentPlayer = playerNames[3]
+    currentTeam = teamFour
+    currentTeamName = teamFourName
+    currentPlayerNumber = 4
+    }
     
-  // Create Turns-active to listen to changes
+    // Create Turns-active to listen to changes
   
-db.collection("turns-active").doc(sessName).set({timeRoundEnd: 0, turnActive: false, currentPlayer: currentPlayer, currentTeam: currentTeam, currentTeamName: currentTeamName, currentRound: 1}).then(function() {console.log("Session successfully created!");
+    db.collection("turns-active").doc(sessName).set({timeRoundEnd: 0, turnActive: false, currentPlayer: currentPlayer, currentTeam: currentTeam, currentTeamName: currentTeamName, currentRound: 1}).then(function() {console.log("Session successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
 
   
-// Create team 1
-db.collection("teams").doc(teamOne).set({teamName: teamOneName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
-}).catch(function(error) {console.error("Error writing document: ", error);});
-// Create team 2
-db.collection("teams").doc(teamTwo).set({teamName: teamTwoName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 ,  totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
-}).catch(function(error) {console.error("Error writing document: ", error);});
+    // Create team 1
+    db.collection("teams").doc(teamOne).set({teamName: teamOneName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
+    }).catch(function(error) {console.error("Error writing document: ", error);});
+    // Create team 2
+    db.collection("teams").doc(teamTwo).set({teamName: teamTwoName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 ,  totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+    }).catch(function(error) {console.error("Error writing document: ", error);});
 
    if (teamCount == 3) {
       
@@ -822,6 +798,7 @@ createPlayerOptions();
 document.getElementById('setupCreateGameSessionButton').disabled = true;
 document.getElementById("createSuccess").style.display = "block";
 document.getElementById("createScreen").style.display = "none";
+
 };
 
 function createPlayerOptions (){
@@ -835,24 +812,6 @@ function createPlayerOptions (){
           selectPlayer.appendChild(el);
         } 
     }; 
-
-
-function showTeamInputBoxes(){
- 
-var teamString = document.getElementById("createSelectTeamNumber").value;
-teamCount = teamString.charAt(0)  
-  
-  if (teamCount == 2) {
-   document.getElementById("setupTeamThree").style.display = "none" 
-   document.getElementById("setupTeamFour").style.display = "none" 
-   } else if (teamCount == 3) {
-   document.getElementById("setupTeamThree").style.display = "block" 
-   document.getElementById("setupTeamFour").style.display = "none" 
-   } else if (teamCount == 4) {
-   document.getElementById("setupTeamThree").style.display = "block" 
-   document.getElementById("setupTeamFour").style.display = "block"
-    } 
-}
 
 function showCreateJoinButton(){
   document.getElementById("createJoinButton").style.display = "block";
@@ -877,16 +836,27 @@ function createBack() {
 // Join Game Functions
 //***************************************
 
+var input = document.getElementById("joinSessionID");
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter" ) {
+      event.preventDefault();
+      sessionPick();
+  }
+});
+
 function sessionPick() {
   
-  sessionPickedName = document.getElementById('selectSession').value;
+  sessionPicked = document.getElementById('joinSessionID').value.toUpperCase();
+  
+  getPlayers();
   
     db.collection("sessions").where("name","==",sessionPickedName).get().then(function(querySnapshot) {
      querySnapshot.forEach(function(doc) {
     sessionPicked = doc.id; 
-     });
+285     });
   }).then(function (activePlayers) { 
       getPlayers();
+      console.log(sessionPicked)
     });
  }
 
@@ -896,17 +866,16 @@ function playerPick() {
 }
 
 function joinGame(){
-  console.log("Session Picked: "+sessionPicked+" - "+sessionPickedName)
+  console.log("Session Picked: "+sessionPicked)
   console.log("Player Picked: "+playerPicked)
   document.getElementById("joinScreen").style.display = "none";
   getTeams();
   getTeamPicked();
   console.log("Active teams: "+activeTeams);
+  document.getElementById("waitSessionID").innerHTML = sessionPicked
   document.getElementById("enterPlayerPicked").innerHTML = playerPicked;
-  document.getElementById("enterSessionPicked").innerHTML = sessionPickedName;
   document.getElementById('startShowPlayer').innerHTML = playerPicked;
   document.getElementById("loginName").innerHTML = playerPicked;
-  document.getElementById("welcomeSession").innerHTML = sessionPickedName;
   document.getElementById('welcomePlayer').innerHTML = playerPicked;
   
   hasUserEnteredNames();
@@ -920,12 +889,10 @@ function updateHomeScreen(){
   
         document.getElementById('showNextPlayer').innerHTML =  currentPlayer;    
         document.getElementById('showNextTeam').innerHTML =  currentTeamName
-        document.getElementById('showRound').innerHTML =  "Round "+currentRound      
-       
+        document.getElementById('showRound').innerHTML =  "Round "+currentRound           
         document.getElementById("homeStart").style.display = "none";
         document.getElementById("homeGoInProgress").style.display = "none";
         document.getElementById("homeMyTeam").style.display = "none";
-
         document.getElementById("homeWait").style.display = "none";    
         document.getElementById("menu-start").style.display = "none"; 
       
@@ -953,20 +920,14 @@ function updateHomeScreen(){
             path: 'https://assets7.lottiefiles.com/temp/lf20_n16WIy.json'
           });
          
-           
-         
-         
-         //fireworks.style.display="block"
-         //fireworks.load('https://assets7.lottiefiles.com/temp/lf20_n16WIy.json');
-         
-          roundScreen.style.display = "none";         
+          //HIDE ROUND SCREEN   roundScreen.style.display = "none";         
           
          enableNavBarButtons();
          document.getElementById("roundEnd-splash").style.display = "none" ;
              
             document.getElementById("menu-start").style.display = "none"; 
            // document.getElementById("turnAlert").style.display = "none";     
-            menuRound.style.display = "none"
+          //HIDE ROUND SCREEN     menuRound.style.display = "none"
       } else  if (currentPlayer == playerPicked && turnActive == false){
       //Users turn
             enableNavBarButtons();
@@ -1037,47 +998,6 @@ var unsubscribeShowHome =  db.collection("turns-active").doc(sessionPicked)
   });  
 }
 
-function closeAlert() {  
- // document.getElementById("turnAlert").style.display = "none";          
- // getStartInfo();
-  }
-
-function hideAlert() {  
-  //document.getElementById("turnAlert").style.display = "none";          
-  }
-
-  function openAlert() {
-  document.getElementById("turnAlert").style.display = "block";        
-  document.getElementById('notificationSound').play();
-  window.navigator.vibrate(200);
-         
-    // IE8 animation polyfill
-    if ($("html").hasClass("lt-ie9")) {
-      var speed = 300;
-      var times = 3;
-      var loop = setInterval(anim, 300);
-      function anim() {
-        times--;
-        if (times === 0) { clearInterval(loop); }
-     //   $(".more-ot-alert").animate({ left: 450 }, speed ).animate({ left: 440 }, speed );
-        //.stop( true, true ).fadeIn();
-      };
-      anim();
-    };
-  }
-
- // $(".close-ot-alert").on("click", function () {
-  //  closeAlert();
-  //});
-
-
-  $(document).keydown(function(e) {
-    if (e.keyCode == 27) { closeAlert(); }
-    if (e.keyCode == 67) { openAlert(); } // C is for click?
-  });
-
-
-
 function hasUserEnteredNames() {
  
    db.collection("players").doc(playerPicked).get().then(function(doc) {
@@ -1143,7 +1063,7 @@ var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false
   });
 }
 
-//When user Joins game - populate session and player functions
+/*When user Joins game - populate session and player functions
 function getActiveSessions () {
   
   activeSessions = [];
@@ -1161,6 +1081,7 @@ function getActiveSessions () {
       document.getElementById("selectSession").style.display = "block";
     });
 };
+*/
 
 function sessionOptions (activeSessions){
     console.log("Active sessions: "+ activeSessions);
@@ -1256,7 +1177,8 @@ function getTeamPicked() {
                      playerNumber = doc.data().orderNumber;
                      console.log("Team picked: "+teamPicked)
                      document.getElementById("welcomeTeam").innerHTML = teamPickedName;
-                     document.getElementById("loginTeamName").innerHTML = teamPickedName;
+                     //document.getElementById("loginTeamName").innerHTML = teamPickedName;
+                     document.getElementById("loginSessionName").innerHTML = sessionPicked;
 
     } else {console.log("No such document!");
     }}).catch(function(error) {console.log("Error getting document:", error);}); 
@@ -1582,6 +1504,36 @@ function addRandomWikiName(){
   countNamesEntered();
 }
 
+document.getElementById('enterNameOne').addEventListener("keyup", function(event) {
+   countNamesEntered();
+});
+document.getElementById('enterNameTwo').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameThree').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameFour').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameFive').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameSix').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameSeven').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameEight').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameNine').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
+document.getElementById('enterNameTen').addEventListener("keyup", function(event) {
+  countNamesEntered();
+});
 
 
 function oneSelect(){hideAllWiki(); document.getElementById("randomWikiNameButton1").style.display = "block"; targetName = 'enterNameOne';}
@@ -1650,7 +1602,7 @@ if (namesInputSoFar == namesPerPlayer){
   document.getElementById('submitNamesButton').disabled = false;
   console.log("Required number of names met")
 }
-  console.log(namesInputSoFar+"input /"+namesPerPlayer+"req")
+
   
 }
 //************************************************
@@ -1734,9 +1686,7 @@ function startRound() {
   jokerActive = document.getElementById("activeJoker").checked;
   document.getElementById("startJoker").style.display = "none";
   document.getElementById("gameStartButton").style.display = "none";  
-  
-  hideAlert();
-    
+     
   disableNavBarButtons();
   
   enableGotItButton();
@@ -2229,11 +2179,6 @@ function showScoresScreen() {
   updateScores();
 }
 
-function showRoundScreen() {
-  showSection(roundScreen, menuRound)
-  liveRoundData();
-
-}
 
 // Game details back buttons
 function backToGameDetailsScreen() {
@@ -2244,6 +2189,12 @@ function backToGameDetailsScreen() {
 //Live round screen
 //*********************
 
+/* LIVE SCREEN DISABLED
+function showRoundScreen() {
+  showSection(roundScreen, menuRound)
+  liveRoundData();
+
+}
 
 
 function liveRoundData() {
@@ -2262,7 +2213,7 @@ var unsubscribe =  db.collection("sessions").doc(sessionPicked)
       console.log(timeLeft) 
       
       var display = document.querySelector('#liveShowTime');
-      liveTimer(timeLeft,display)
+     // liveTimer(timeLeft,display)
       
      if (doc.data().turnActive == true){
        //Round active 
@@ -2309,9 +2260,7 @@ var tickTock = setInterval(function () {
       clearInterval(tickTock)
 
       } else if (bagNames.length == 0) {  
-          // Detect that the round is up, pause timer
-        
-        
+          // Detect that the round is up, pause timer       
         
       } else {
           --timer 
@@ -2321,9 +2270,7 @@ var tickTock = setInterval(function () {
   }, 1000);
   console.log(timer)
 };
-
-
-
+*/
 //************************
 //Scores screen function
 //************************
@@ -2732,7 +2679,7 @@ function disableNavBarButtons() {
 document.getElementById('appNavBar').style.display = "none"
 menuHome.style.display = "none"
 menuStart.style.display = "none"
-menuRound.style.display = "none"
+ //HIDE ROUND SCREEN  menuRound.style.display = "none"
 menuScores.style.display = "none"  
 menuTeams.style.display = "none"
 menuRefresh.style.display = "none"  
@@ -2741,7 +2688,7 @@ menuRefresh.style.display = "none"
 function enableNavBarButtons() {
 document.getElementById('appNavBar').style.display = "flex"
 menuHome.style.display = "block"
-menuRound.style.display = "block"
+ //HIDE ROUND SCREEN  menuRound.style.display = "block"
 menuScores.style.display = "block"  
 menuTeams.style.display = "block"  
 menuRefresh.style.display = "block"  
