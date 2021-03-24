@@ -1,0 +1,170 @@
+<!doctype html>
+<!--Copyright James Palmer 2021 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="James' attempt at bringing game nights to the 21st century">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bag Minge</title>
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Bag Minge">
+  <meta name="theme-color" content="#303F9F">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bag Minge">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+
+  <!-- Tile icon for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <meta name="msapplication-navbutton-color" content="#303F9F">
+
+  <!-- manifest and icons -->
+<link rel="manifest" href="/public/manifest.json">
+<meta name="theme-color" content="#009688">
+<link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
+<link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
+  
+<!-- Bootstrap-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="https://kit.fontawesome.com/b8fb1d85ce.js" crossorigin="anonymous"></script> 
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyBuXyvgX4mBbFB-NfLK3HYE88_6h_4-5Tg",
+    authDomain: "bagminge.firebaseapp.com",
+    databaseURL: "https://bagminge.firebaseio.com",
+    projectId: "bagminge",
+    storageBucket: "bagminge.appspot.com",
+    messagingSenderId: "492822420231",
+    appId: "1:492822420231:web:abb6b44b182e7c37"
+  };
+  firebase.initializeApp(firebaseConfig);    
+</script>
+
+<!-- Lottie animation library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/public/main.css">
+<link rel="stylesheet" href="live.css">
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>      
+
+
+<script src="/sw.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HVXRSEZ93K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HVXRSEZ93K');
+</script>
+
+</head>
+  
+<body style="background-color: #b2dfdb;">
+    <!--preload sounds-->
+  <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
+  <audio id="notificationSound" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
+  <audio id="passSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2FComputer%20Error%20Alert-SoundBible.com-783113881.mp3?v=1573189144087" preload="auto"></audio>
+  <audio id="correctSound" src="https://cdn.glitch.com/57b6d905-4694-466f-8144-3fc7ce576567%2Fsoundsilk-Correct-Answer-Soundeffect.mp3?v=1573189144712" preload="auto"></audio> 
+  
+  <div id="header" style="display:block">
+  
+    <div class="navbarbottom" id="appNavBar" style="display:block" >
+      <a id="menu-goHome" style="display: block" class=""><i class="fa fa-home"></i></a>
+      <a id="menu-start"  style="display: block" class=""><i class="fa fa-play"></i></a>
+      <a id="menu-teams"  style="display: block" class=""><i class="fa fa-users"></i></a>
+      <a id="menu-scores" style="display: block" class=""><i class="fa fa-trophy"></i></a>
+      <!--//HIDE ROUND SCREEN  <a id="menu-round"  style="display: block" class=""><i class="fa fa-tv"></i></a>-->
+      <a id="menu-refresh"  style="display: block" class=""><i id="refreshIcon" class="fa fa-refresh"></i></a>
+      <a id="menu-exit"  style="display: block" class=""><i id="signOutIcon" class="fas fa-sign-out-alt"></i></a>   
+    </div>
+   
+   <nav class="navbar navbar-inverse">
+       <div class="container-fluid">
+         <div class="navbar-brand">
+          <h1>BAGMINGE
+          </h1>
+        </div>        
+       </div>
+    </nav>
+     
+   <img alt="logo" id="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
+      
+  </div>
+
+  <div class="container" >  
+    <section id="sessionNotEntered">
+      <a onclick="location.reload" class="btn backButton"><i class="fa fa-arrow-left"></i> Back</a>
+      <h4>
+        Welcome to Bag Minge</h4>
+       <p>
+      Enter your session code below to join and follow along:      </p>
+
+ 
+      <div class="input-group mb-3">
+       <input type="text" class="form-control" id="joinSessionID" placeholder="Enter code" aria-label="Session code" aria-describedby="button-addon2">
+       <br>
+       <div class="input-group-append row">
+         <button class="btn btn-outline-secondary" type="button" id="enterCode" onclick="sessionPick()"><i class="fa fa-plus"></i> Join Game</button>
+       </div> 
+
+
+   </div>
+    </section>  
+    <section id="sessionEntered" style="display:none">
+    <div class="row">
+          <div id="turnStatus" class="turnStatus" style="display:block">
+          </div>
+      </div>
+      <div class="row">
+         <div id="turnInProgress" class="turnInProgress" style="display:none">
+             <p type="text" id="roundTeam" style="width:100%"></p>
+             <hr>
+             <p type="text" id="roundPlayer" style="width:100%"></p>
+      </div>
+      <div class="row">
+         <div id="turnInProgressNameScore" class="turnInProgressNameScore" style="display:none">
+          <div class="row">   
+           <h3 type="text" id="roundScoreNow"  style="width:100%">-</h3>
+          </div>
+          <hr>
+           <div class="row">
+             <h3 type="text" id="lastNameGuessed"  style="width:100%">-</h3>
+         </div>
+        </div>
+      </div>
+      <div class="row">
+          <h5 type="text" id="roundNextTeam"></h5>
+      </div>
+      <div class="row">
+          <h5 type="text" id="roundNextPlayer"></h5>
+       </div> 
+  </div>
+
+</section>
+  </div>
+
+
+</body>
+<script src="live.js"></script>
+</html>
