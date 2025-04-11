@@ -157,7 +157,8 @@ function cleanupUi() {
 }
 
 /**
- * The ID of the currently signed-in User to detect Auth state change events that are just programmatic token refresh but not a User status change.
+ * The ID of the currently signed-in User. We keep track of this to detect Auth state change events that are just
+ * programmatic token refresh but not a User status change.
  */
 var currentUID;
 
@@ -186,6 +187,7 @@ function onAuthStateChanged(user) {
 }
 
 window.addEventListener('load', function() {
+  
   // Listen for auth state changes
   firebase.auth().onAuthStateChanged(onAuthStateChanged);
   
@@ -535,11 +537,11 @@ function adjustNameCount(){
     currentPlayerNumber = 4
     }
     
-    /* Create Turns-active to listen to changes
+    // Create Turns-active to listen to changes
   
     db.collection("turns-active").doc(sessName).set({timeRoundEnd: 0, turnActive: false, currentPlayer: currentPlayer, currentTeam: currentTeam, currentTeamName: currentTeamName, currentRound: 1}).then(function() {console.log("Session successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
-      */
+
   
     // Create team 1
     db.collection("teams").doc(teamOne).set({teamName: teamOneName, tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , totalScore: 0, lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
@@ -638,7 +640,7 @@ function adjustNameCount(){
      
     for (var i = 0, len = playerNames.length; i < len; i++) { 
             
-   if (orderNumber == 1){  db.collection("players").doc(playerNames[i]).set({score: 0, s: 0, avgScore: 0, sessionName: sessName, hasEnteredNames: false, team:teamOne, teamName: teamOneName, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+   if (orderNumber == 1){  db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, avgScore: 0, sessionName: sessName, hasEnteredNames: false, team:teamOne, teamName: teamOneName, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                            db.collection("teams").doc(teamOne).update({currentPlayer:playerNames[i], p01:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t1p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                            db.collection("sessions").doc(sessName).update({p01:playerNames[i]}).then(function() {console.log("t1p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); }
       
@@ -1002,15 +1004,8 @@ function hasUserEnteredNames() {
 
 function checkForPlayersEnteredNames () {
 
-// Optimize listener with query cache
-const playersQuery = db.collection("players")
-  .where("hasEnteredNames", "==", false)
-  .where("sessionName", "==", sessionPicked)
-  .limit(20); // Add limit for performance
-
-var unsubscribe = playersQuery.onSnapshot({includeMetadataChanges: true}, function(querySnapshot) {
-  // Only process changes if data is from server, not cache
-  if (!querySnapshot.metadata.fromCache) {
+var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false).where("sessionName", "==", sessionPicked)
+    .onSnapshot(function(querySnapshot) {
       
        listenCheckEntered = true
        console.log("CheckEntered Snapshot called")
@@ -1585,17 +1580,11 @@ if (namesInputSoFar == namesPerPlayer){
 //*************************************************
 function getBagNames(){
  bagNames = [];
- // Optimize names query with index and field selection
-db.collection("names")
-  .where("sessionName", "==", sessionPicked)
-  .where("round", "==", currentRound)
-  .select('bagName') // Only fetch the bagName field
-  .get()
-  .then(function(querySnapshot) {
-    bagNames = querySnapshot.docs.map(doc => doc.data().bagName);
-    console.log([bagNames]);
-    document.getElementById("gameStartButton").style.display = "block";
-  });
+ db.collection("names").where("sessionName","==",sessionPicked).where("round","==",currentRound).get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {bagNames.push(doc.data().bagName); });
+   console.log([bagNames])
+   document.getElementById("gameStartButton").style.display = "block"; 
+ });
 };
 
 
@@ -1690,29 +1679,11 @@ function startRound() {
   timeRoundEnd = timeNow + (roundTimeNow*1000)
 
   
- // Batch write for session updates
-const batch = db.batch();
-const sessionRef = db.collection('sessions').doc(sessionPicked);
-const turnsRef = db.collection('turns-active').doc(sessionPicked);
-
-batch.update(sessionRef, { 
-  timeRoundEnd: timeRoundEnd, 
-  turnActive: true, 
-  currentPlayer: playerPicked, 
-  currentScore: 0 
-});
-
-batch.update(turnsRef, { 
-  timeRoundEnd: timeRoundEnd, 
-  turnActive: true, 
-  currentPlayer: playerPicked
-});
-
-batch.commit().then(() => {
-  console.log('Session and turns updated in batch');
-}).catch(error => {
-  console.error('Error in batch update:', error);
-});
+ db.collection('sessions').doc(sessionPicked).update({ timeRoundEnd: timeRoundEnd, turnActive: true, currentPlayer: playerPicked, currentScore: 0 }).then(function() {console.log("Session player logged");
+}).catch(function(error) {console.error("Error updating current player and reset score: ", error);});
+  
+ db.collection('turns-active').doc(sessionPicked).update({ timeRoundEnd: timeRoundEnd, turnActive: true, currentPlayer: playerPicked}).then(function() {console.log("Session player logged");
+}).catch(function(error) {console.error("Error updating current player and reset score: ", error);});
   
   
       
@@ -2279,38 +2250,20 @@ var orderedTeamNames = []
 
 function endTeamScores(){
   
-  // Cache team scores query
-const teamsQuery = db.collection("teams")
-  .where("sessionName", "==", sessionPicked)
-  .orderBy("totalScore", "desc");
-
-// Use memoization for team scores
-let cachedTeamScores = null;
-let lastFetchTime = 0;
-const CACHE_DURATION = 5000; // 5 seconds cache
-
-if (!cachedTeamScores || Date.now() - lastFetchTime > CACHE_DURATION) {
-  teamsQuery.get().then(function(querySnapshot) {
-    teamScores = [];
-    orderedTeamIDs = [];
-    orderedTeamNames = [];
-    
+  db.collection("teams").where("sessionName", "==", sessionPicked).orderBy("totalScore","desc").get().then(function(querySnapshot){
+     
+  teamScores= []      
+  orderedTeamIDs = []   
+  orderedTeamNames = []   
+  
     querySnapshot.forEach(function(doc) {
-      var teamID = doc.id;
-      var teamName = doc.data().teamName;
-      var teamScore = doc.data().totalScore;
-      orderedTeamIDs.push(teamID);
-      orderedTeamNames.push(teamName);
-      teamScores.push(teamScore);
-    });
-    
-    cachedTeamScores = {
-      scores: teamScores,
-      ids: orderedTeamIDs,
-      names: orderedTeamNames
-    };
-    lastFetchTime = Date.now();
-  });
+          var teamID = doc.id
+          var teamName = doc.data().teamName
+          var teamScore = doc.data().totalScore
+          orderedTeamIDs.push(teamID)
+          orderedTeamNames.push(teamName)
+          teamScores.push(teamScore)
+        });
 
     var winningMargin = teamScores[0] - teamScores[1]
     var rankTeam = orderedTeamIDs.indexOf(teamPicked)    
