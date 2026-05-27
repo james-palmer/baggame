@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function sessionDoc(sessionId) {
+      return get(/databases/$(database)/documents/sessions/$(sessionId));
+    }
+
+    function sessionExists(sessionId) {
+      return exists(/databases/$(database)/documents/sessions/$(sessionId));
+    }
+
+    function isSessionOwner(sessionId) {
+      return signedIn()
+        && sessionExists(sessionId)
+        && sessionDoc(sessionId).data.ownerUid == request.auth.uid;
+    }
+
+    function hasSessionMembership(sessionId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/session-members/$(sessionId + "__" + request.auth.uid));
+    }
+
+    function isSessionMember(sessionId) {
+      return isSessionOwner(sessionId) || hasSessionMembership(sessionId);
+    }
+
+    function isActiveSession(sessionId) {
+      return sessionExists(sessionId) && sessionDoc(sessionId).data.active == true;
+    }
+
+    match /sessions/{sessionId} {
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow read: if isActiveSession(sessionId) || isSessionMember(sessionId);
+      allow update, delete: if isSessionMember(sessionId);
+    }
+
+    match /turns-active/{sessionId} {
+      allow create, read, update, delete: if isActiveSession(sessionId) || isSessionMember(sessionId);
+    }
+
+    match /players/{playerId} {
+      allow read: if isActiveSession(resource.data.sessionName) || isSessionMember(resource.data.sessionName);
+      allow create: if signedIn()
+        && isSessionOwner(request.resource.data.sessionName)
+        && request.resource.data.memberUid == null;
+      allow update: if signedIn()
+        && request.resource.data.sessionName == resource.data.sessionName
+        && request.resource.data.displayName == resource.data.displayName
+        && request.resource.data.team == resource.data.team
+        && request.resource.data.teamName == resource.data.teamName
+        && request.resource.data.teamOrderNumber == resource.data.teamOrderNumber
+        && request.resource.data.orderNumber == resource.data.orderNumber
+        && (
+          isSessionOwner(resource.data.sessionName)
+          || resource.data.memberUid == request.auth.uid
+          || (resource.data.memberUid == null && request.resource.data.memberUid == request.auth.uid)
+        );
+      allow delete: if isSessionOwner(resource.data.sessionName);
+    }
+
+    match /teams/{teamId} {
+      allow read: if isActiveSession(resource.data.sessionName) || isSessionMember(resource.data.sessionName);
+      allow create, update, delete: if isSessionMember(request.resource.data.sessionName)
+        || isSessionMember(resource.data.sessionName);
+    }
+
+    match /names/{nameId} {
+      allow read: if isActiveSession(resource.data.sessionName) || isSessionMember(resource.data.sessionName);
+      allow create: if signedIn()
+        && isSessionMember(request.resource.data.sessionName)
+        && request.resource.data.submittedByUid == request.auth.uid;
+      allow update: if signedIn()
+        && isSessionMember(resource.data.sessionName);
+      allow delete: if isSessionOwner(resource.data.sessionName);
+    }
+
+    match /session-members/{memberId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && sessionExists(request.resource.data.sessionName)
+        && (
+          isSessionOwner(request.resource.data.sessionName)
+          || (
+            exists(/databases/$(database)/documents/players/$(request.resource.data.playerDocId))
+            && get(/databases/$(database)/documents/players/$(request.resource.data.playerDocId)).data.sessionName == request.resource.data.sessionName
+            && get(/databases/$(database)/documents/players/$(request.resource.data.playerDocId)).data.memberUid == request.auth.uid
+          )
+        );
+      allow update, delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+  }
+}

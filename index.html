@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="James' attempt at bringing game nights to the 21st century">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://code.jquery.com https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://kit.fontawesome.com https://www.gstatic.com https://canvasjs.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com; img-src 'self' data: https:; media-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://query.wikidata.org https://www.google-analytics.com; font-src 'self' data: https://stackpath.bootstrapcdn.com https://ka-f.fontawesome.com; frame-src https://en.wikiquote.org; object-src 'none'; base-uri 'self'; frame-ancestors 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Bag Minge</title>
   <!-- Disable tap highlight on IE -->
   <meta name="msapplication-tap-highlight" content="no">
@@ -586,8 +588,6 @@ start screen
 <button id="roundEndHomeButton"  onclick="showSection(homeScreen, menuHome);showHomeScreenDetails();enableNavBarButtons();" class="submit btn btn-primary"><i class="fa fa-home" style="font-size: 4em"></i></button>
 </section>
      
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        
   <!-- Show teams screen 
 *****************************-->
   
@@ -937,7 +937,7 @@ start screen
         </button>
       </div>
       <div class="modal-body" >
-           <iframe id="wiki" style="border:none" height="100%" width="100%"></iframe>
+           <iframe id="wiki" sandbox="allow-same-origin allow-scripts" referrerpolicy="no-referrer" style="border:none" height="100%" width="100%"></iframe>
              <div id="wikiWait">
                 <div class="row">
                     <div class="col-md-12">
